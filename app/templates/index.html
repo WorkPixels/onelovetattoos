@@ -133,7 +133,36 @@
 
       <!-- Gallery Grid -->
       <div class="gallery-grid" id="galleryGrid">
-        <!-- Rendered via JS -->
+        {% for photo in photos %}
+        <div class="tattoo-card" data-category="{{ photo.category }}" data-artist="{{ photo.artist_name }}" onclick="openLightbox({{ loop.index0 }})">
+          <div class="tattoo-img-wrapper">
+            {% if photo.is_featured %}<span class="featured-badge">★ Featured</span>{% endif %}
+            <img src="{{ photo.image_url }}" alt="{{ photo.title }}" class="tattoo-img" loading="lazy" />
+            <div class="card-overlay-btn">
+              <div class="zoom-circle">&#10530;</div>
+            </div>
+          </div>
+          <div class="tattoo-card-info">
+            <div class="tattoo-card-header">
+              <h4 class="tattoo-title">{{ photo.title }}</h4>
+              <span class="tattoo-cat-tag">{{ photo.category }}</span>
+            </div>
+            <div class="tattoo-artist-credit">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              {{ photo.artist_name }}
+            </div>
+            {% if photo.description %}<p class="tattoo-card-desc">{{ photo.description }}</p>{% endif %}
+            <div class="tattoo-card-footer">
+              <div class="tattoo-tags">
+                {% for tag in photo.tags.split(',')[:3] if tag.strip() %}
+                  <span class="tattoo-tag">#{{ tag.strip() }}</span>
+                {% endfor %}
+              </div>
+              <span style="font-size: 0.78rem; color: var(--accent-gold); font-weight: 600;">View &#10142;</span>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
       </div>
     </div>
   </section>
@@ -318,7 +347,7 @@
             <div class="artist-specialties">{{ artist.specialties }}</div>
             <p class="artist-bio">{{ artist.bio }}</p>
             <div style="display: flex; gap: 10px; justify-content: center;">
-              <button onclick="filterByArtist('{{ artist.name }}')" class="btn btn-outline btn-sm">
+              <button data-artist="{{ artist.name }}" onclick="filterByArtist(this.getAttribute('data-artist'))" class="btn btn-outline btn-sm">
                 View Portfolio
               </button>
               <a href="#booking" class="btn btn-primary btn-sm">Book with {{ artist.name.split(' ')[0] }}</a>

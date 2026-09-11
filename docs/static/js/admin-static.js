@@ -3,6 +3,190 @@
  * Enables 100% full dashboard functionality directly on GitHub Pages!
  */
 
+const DEFAULT_DEMO_PHOTOS = [
+  {
+    "title": "Hyper-Realistic Lion & Crown Sleeve",
+    "description": "Full forearm black and grey piece featuring realistic fur texture, deep shadows, and imperial crown composition.",
+    "image_url": "static/uploads/demo/tattoo_bg_lion.jpg",
+    "artist_name": "Marcus 'Vex' Cole",
+    "category": "Black & Grey",
+    "tags": "Lion, Crown, Realism, Sleeve, Forearm",
+    "is_featured": 1,
+    "sort_order": 1,
+    "id": 1
+  },
+  {
+    "title": "Classic American Traditional Dagger & Heart",
+    "description": "Bold American traditional clash piece with heavyweight outlines, rich crimson fills, and timeless flash aesthetic.",
+    "image_url": "static/uploads/demo/tattoo_trad_dagger.jpg",
+    "artist_name": "Elena 'Ink' Cruz",
+    "category": "Traditional",
+    "tags": "Dagger, Heart, Traditional, Color, Bold",
+    "is_featured": 1,
+    "sort_order": 2,
+    "id": 2
+  },
+  {
+    "title": "Micro Botanical Wildflower Wrap",
+    "description": "Single-needle delicate floral bouquet with Texas bluebonnets, fern leaves, and micro-shading wrapping the wrist.",
+    "image_url": "static/uploads/demo/tattoo_fineline_botanical.jpg",
+    "artist_name": "Kai Soren",
+    "category": "Fine Line",
+    "tags": "Floral, Botanical, Wrist, Fine Line, Minimal",
+    "is_featured": 1,
+    "sort_order": 3,
+    "id": 3
+  },
+  {
+    "title": "Curated Ear Project - Titanium & Opal Rings",
+    "description": "Triple helix piercing paired with daith ring in ASTM F-136 titanium and genuine synthetic opal clusters.",
+    "image_url": "static/uploads/demo/piercing_ear_curation.jpg",
+    "artist_name": "Samira Dawn",
+    "category": "Piercings",
+    "tags": "Helix, Daith, Piercing, Titanium, Ear Curation",
+    "is_featured": 1,
+    "sort_order": 4,
+    "id": 4
+  },
+  {
+    "title": "Japanese Irezumi Koi & Lotus Wave",
+    "description": "Dynamic oriental scale work with wind bars, stormy waves, and vibrant lotus accents across forearm.",
+    "image_url": "static/uploads/demo/tattoo_japanese_koi.jpg",
+    "artist_name": "Elena 'Ink' Cruz",
+    "category": "Japanese",
+    "tags": "Koi, Lotus, Japanese, Irezumi, Sleeve",
+    "is_featured": 1,
+    "sort_order": 5,
+    "id": 5
+  },
+  {
+    "title": "Dark Chicano Skull & Hourglass Roses",
+    "description": "Hand-rendered smooth gradients, high-contrast dark surrealism, and hyper-detailed bone texture.",
+    "image_url": "static/uploads/demo/tattoo_bg_skull.jpg",
+    "artist_name": "Marcus 'Vex' Cole",
+    "category": "Black & Grey",
+    "tags": "Skull, Roses, Black & Grey, Surrealism, Arm",
+    "is_featured": 1,
+    "sort_order": 6,
+    "id": 6
+  },
+  {
+    "title": "Geometric Dotwork Forearm Tattoo",
+    "description": "Intricate stippling and sacred geometry concentric patterns wrapping the forearm and wrist.",
+    "image_url": "static/uploads/demo/tattoo_bg_mandala.jpg",
+    "artist_name": "Kai Soren",
+    "category": "Fine Line",
+    "tags": "Mandala, Dotwork, Sacred Geometry, Forearm",
+    "is_featured": 1,
+    "sort_order": 7,
+    "id": 7
+  },
+  {
+    "title": "Bold Sailor Jerry Style Eagle & Banner",
+    "description": "Iconic traditional swooping bald eagle clutching banner with saturated red, gold, and green tones.",
+    "image_url": "static/uploads/demo/tattoo_trad_eagle.jpg",
+    "artist_name": "Elena 'Ink' Cruz",
+    "category": "Traditional",
+    "tags": "Eagle, Americana, Traditional, Color, Chest",
+    "is_featured": 0,
+    "sort_order": 8,
+    "id": 8
+  },
+  {
+    "title": "Cinematic Realism Eye & Pocketwatch",
+    "description": "Dramatic chiaroscuro realism depicting reflective iris, tear highlight, and Roman numeral mechanical gear detail.",
+    "image_url": "static/uploads/demo/tattoo_realism_eye.jpg",
+    "artist_name": "Marcus 'Vex' Cole",
+    "category": "Realism",
+    "tags": "Eye, Clock, Realism, Black & Grey, Bicep",
+    "is_featured": 1,
+    "sort_order": 9,
+    "id": 9
+  },
+  {
+    "title": "Precision Solid Gold Septum Clicker",
+    "description": "Flawless sweet-spot placement healed with a hand-polished 14-karat solid yellow gold clicker ring.",
+    "image_url": "static/uploads/demo/piercing_septum_gold.jpg",
+    "artist_name": "Samira Dawn",
+    "category": "Piercings",
+    "tags": "Septum, Gold, Nose, Piercing, Facial",
+    "is_featured": 0,
+    "sort_order": 10,
+    "id": 10
+  },
+  {
+    "title": "Double Nostril & Piercing Studs",
+    "description": "Symmetrical nostril piercings styled with high-polish titanium bezel-set cubic zirconia studs.",
+    "image_url": "static/uploads/demo/piercing_nostril_stud.jpg",
+    "artist_name": "Samira Dawn",
+    "category": "Piercings",
+    "tags": "Nostril, Stud, Piercing, Titanium, Facial",
+    "is_featured": 0,
+    "sort_order": 11,
+    "id": 11
+  },
+  {
+    "title": "Delicate Minimalist Constellation & Moon",
+    "description": "Micro single-needle celestial astronomy piece with crescent moon, orbit rings, and stippled star dust.",
+    "image_url": "static/uploads/demo/tattoo_fineline_stars.jpg",
+    "artist_name": "Kai Soren",
+    "category": "Fine Line",
+    "tags": "Moon, Stars, Celestial, Fine Line, Ankle",
+    "is_featured": 0,
+    "sort_order": 12,
+    "id": 12
+  },
+  {
+    "title": "Intricate Floral Mandala Arm Cuff",
+    "description": "Precision symmetrical lotus mandala with delicate hanging bead accents wrapping around the arm.",
+    "image_url": "static/uploads/demo/tattoo_bg_floral.jpg",
+    "artist_name": "Kai Soren",
+    "category": "Black & Grey",
+    "tags": "Mandala, Floral, Cuff, Arm, Geometry",
+    "is_featured": 0,
+    "sort_order": 13,
+    "id": 13
+  },
+  {
+    "title": "One Love Georgetown Studio & Flash Wall",
+    "description": "Our custom Georgetown shop station featuring framed flash art, sterile barriers, and welcoming atmosphere.",
+    "image_url": "static/uploads/demo/studio_ink_workstation.jpg",
+    "artist_name": "One Love Studio",
+    "category": "Flash & Studio",
+    "tags": "Studio, Georgetown, Shop, Station, Texas",
+    "is_featured": 1,
+    "sort_order": 14,
+    "id": 14
+  },
+  {
+    "title": "Custom Rotary Machine & Sterile Workstation",
+    "description": "Hospital-grade sterile set-up with disposable grips, single-use needle cartridges, and premium organic inks.",
+    "image_url": "static/uploads/demo/studio_rotary_machine.jpg",
+    "artist_name": "One Love Studio",
+    "category": "Flash & Studio",
+    "tags": "Equipment, Sterile, Machine, Ink, Studio",
+    "is_featured": 0,
+    "sort_order": 15,
+    "id": 15
+  }
+];
+
+function resolveAssetUrl(url) {
+  if (!url) return 'static/uploads/demo/tattoo_bg_lion.jpg';
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+    return url;
+  }
+  let clean = url.startsWith('/') ? url.slice(1) : url;
+  if (window.location.pathname.includes('/admin/')) {
+    return '../' + clean;
+  }
+  if (window.location.pathname.includes('/onelovetattoos/')) {
+    return '/onelovetattoos/' + clean;
+  }
+  return clean;
+}
+
+
 const DEFAULT_ARTISTS = [
   {
     id: 1,
@@ -132,25 +316,21 @@ window.adminLogout = function() {
 // Data Persistence (LocalStorage + Seed JSON)
 // ==========================================
 async function loadInitialData() {
+  try {
+    localStorage.removeItem('onelove_custom_photos');
+  } catch (e) {}
+
   // Photos
-  const cachedPhotos = localStorage.getItem('onelove_custom_photos');
+  const cachedPhotos = localStorage.getItem('onelove_photos_v4');
   if (cachedPhotos) {
     try {
       adminPhotos = JSON.parse(cachedPhotos);
     } catch {
-      adminPhotos = [];
+      adminPhotos = [...DEFAULT_DEMO_PHOTOS];
     }
   } else {
-    try {
-      const res = await fetch('photos.json');
-      if (res.ok) {
-        const data = await res.json();
-        adminPhotos = (data.photos || []).map((p, idx) => ({ ...p, id: p.id || (idx + 1) }));
-        savePhotos();
-      }
-    } catch (err) {
-      console.error('Error fetching photos.json:', err);
-    }
+    adminPhotos = [...DEFAULT_DEMO_PHOTOS];
+    savePhotos();
   }
 
   // Inquiries
@@ -181,7 +361,8 @@ async function loadInitialData() {
 }
 
 function savePhotos() {
-  localStorage.setItem('onelove_custom_photos', JSON.stringify(adminPhotos));
+  localStorage.setItem('onelove_photos_v4', JSON.stringify(adminPhotos));
+  localStorage.setItem('onelove_photos_v3', JSON.stringify(adminPhotos));
 }
 
 function saveInquiries() {
@@ -399,7 +580,7 @@ function filterAdminPhotos() {
 
   container.innerHTML = filtered.map(p => `
     <div class="admin-photo-card" id="admin-photo-${p.id}">
-      <img src="${p.image_url}" alt="${escapeHtml(p.title)}" class="admin-photo-thumb" />
+      <img src="${resolveAssetUrl(p.image_url)}" alt="${escapeHtml(p.title)}" class="admin-photo-thumb" onerror="this.onerror=null; this.src=resolveAssetUrl('static/uploads/demo/tattoo_bg_lion.jpg');" />
       <div class="admin-photo-details">
         <div class="admin-photo-title" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</div>
         <div class="admin-photo-meta">

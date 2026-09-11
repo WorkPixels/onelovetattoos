@@ -59,6 +59,10 @@ def index(request: Request):
         cursor.execute("SELECT * FROM artists WHERE is_active = 1 ORDER BY sort_order ASC")
         artists = [dict(r) for r in cursor.fetchall()]
 
+        # All photos for initial gallery render
+        cursor.execute("SELECT * FROM photos ORDER BY sort_order ASC, created_at DESC LIMIT 50")
+        photos = [dict(r) for r in cursor.fetchall()]
+
         # Studio settings
         cursor.execute("SELECT key, value FROM settings")
         settings = {r["key"]: r["value"] for r in cursor.fetchall()}
@@ -67,6 +71,7 @@ def index(request: Request):
         request=request,
         name="index.html",
         context={
+            "photos": photos,
             "featured_photos": featured_photos,
             "categories": categories,
             "artists": artists,
