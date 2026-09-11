@@ -99,6 +99,30 @@ async function fetchGalleryPhotos() {
     </div>
   `;
 
+  // Check localStorage first if on static host
+  const localStoredPhotos = localStorage.getItem('onelove_custom_photos');
+  if (localStoredPhotos) {
+    try {
+      let list = JSON.parse(localStoredPhotos);
+      if (currentCategory && currentCategory !== 'all') {
+        list = list.filter(p => p.category && p.category.toLowerCase() === currentCategory.toLowerCase());
+      }
+      if (currentArtist && currentArtist !== 'all') {
+        list = list.filter(p => p.artist_name && p.artist_name.toLowerCase() === currentArtist.toLowerCase());
+      }
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        list = list.filter(p => 
+          (p.title && p.title.toLowerCase().includes(q)) ||
+          (p.tags && p.tags.toLowerCase().includes(q)) ||
+          (p.artist_name && p.artist_name.toLowerCase().includes(q))
+        );
+      }
+      currentPhotos = list;
+      renderGallery(currentPhotos);
+    } catch {}
+  }
+
   try {
     let url = `/api/photos?limit=60`;
     if (currentCategory && currentCategory !== 'all') {
@@ -118,39 +142,35 @@ async function fetchGalleryPhotos() {
 
     renderGallery(currentPhotos);
   } catch (err) {
-    console.log('API fetch not available, loading static photos:', err);
-    try {
-      const staticRes = await fetch('photos.json');
-      if (staticRes.ok) {
-        const data = await staticRes.json();
-        let list = data.photos || [];
-        if (currentCategory && currentCategory !== 'all') {
-          list = list.filter(p => p.category && p.category.toLowerCase() === currentCategory.toLowerCase());
+    if (!localStoredPhotos) {
+      try {
+        const staticRes = await fetch('photos.json');
+        if (staticRes.ok) {
+          const data = await staticRes.json();
+          let list = data.photos || [];
+          localStorage.setItem('onelove_custom_photos', JSON.stringify(list));
+          if (currentCategory && currentCategory !== 'all') {
+            list = list.filter(p => p.category && p.category.toLowerCase() === currentCategory.toLowerCase());
+          }
+          if (currentArtist && currentArtist !== 'all') {
+            list = list.filter(p => p.artist_name && p.artist_name.toLowerCase() === currentArtist.toLowerCase());
+          }
+          if (searchQuery) {
+            const q = searchQuery.toLowerCase();
+            list = list.filter(p => 
+              (p.title && p.title.toLowerCase().includes(q)) ||
+              (p.tags && p.tags.toLowerCase().includes(q)) ||
+              (p.artist_name && p.artist_name.toLowerCase().includes(q))
+            );
+          }
+          currentPhotos = list;
+          renderGallery(currentPhotos);
+          return;
         }
-        if (currentArtist && currentArtist !== 'all') {
-          list = list.filter(p => p.artist_name && p.artist_name.toLowerCase() === currentArtist.toLowerCase());
-        }
-        if (searchQuery) {
-          const q = searchQuery.toLowerCase();
-          list = list.filter(p => 
-            (p.title && p.title.toLowerCase().includes(q)) ||
-            (p.tags && p.tags.toLowerCase().includes(q)) ||
-            (p.artist_name && p.artist_name.toLowerCase().includes(q))
-          );
-        }
-        currentPhotos = list;
-        renderGallery(currentPhotos);
-        return;
+      } catch (fallbackErr) {
+        console.error('Fallback failed:', fallbackErr);
       }
-    } catch (fallbackErr) {
-      console.error('Fallback failed:', fallbackErr);
     }
-
-    grid.innerHTML = `
-      <div class="gallery-empty">
-        <p style="color: #ef4444;">Failed to load tattoos. Please refresh.</p>
-      </div>
-    `;
   }
 }
 
@@ -392,10 +412,27 @@ function initBookingForm() {
           alert(`Thank you, ${payload.client_name}!\n\nYour consultation request (#${data.inquiry_id}) has been sent directly to One Love Tattoos. Our team will review your concept and reach out via email or phone to confirm your consultation/deposit.`);
         } else {
           alert(data.detail || 'Failed to submit consultation. Please give us a call at (512) 868-1588.');
-        }
       } catch (err) {
-        console.error('Submission error:', err);
-        alert('Network error. Please call us at (512) 868-1588 to book!');
+        console.log('API submission failed, saving locally to inquiries inbox:', err);
+        const inqId = Date.now();
+        const storedInq = {
+          id: inqId,
+          ...payload,
+          status: 'New',
+          created_at: new Date().toISOString()
+        };
+        try {
+          const currentInqs = JSON.parse(localStorage.getItem('onelove_inquiries') || '[]');
+          currentInqs.unshift(storedInq);
+          localStorage.setItem('onelove_inquiries', JSON.stringify(currentInqs));
+          showToast(`Consultation request saved! Reference #${inqId}`);
+          form.reset();
+          uploadedReferenceUrl = '';
+          if (preview) preview.style.display = 'none';
+          alert(`Thank you, ${payload.client_name}!\n\nYour consultation request (#${inqId}) has been recorded! Our team at One Love Tattoos will review your concept and reach out.`);
+        } catch {
+          alert('Could not submit inquiry. Please call us directly at (512) 868-1588!');
+        }
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
@@ -409,30 +446,29 @@ async function handleReferenceUpload(file) {
   const previewImg = document.getElementById('refPreviewImg');
   const previewName = document.getElementById('refPreviewName');
 
+  // Preview immediately with FileReader
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    uploadedReferenceUrl = e.target.result;
+    if (preview) preview.style.display = 'flex';
+    if (previewImg) previewImg.src = uploadedReferenceUrl;
+    if (previewName) previewName.textContent = file.name;
+  };
+  reader.readAsDataURL(file);
+
   const formData = new FormData();
   formData.append('file', file);
 
   try {
-    if (preview) {
-      preview.style.display = 'flex';
-      previewName.textContent = 'Uploading reference...';
-    }
-
     const res = await fetch('/api/upload/public-reference', {
       method: 'POST',
       body: formData
     });
-
     const data = await res.json();
     if (res.ok && data.url) {
       uploadedReferenceUrl = data.url;
-      if (previewImg) previewImg.src = data.url;
-      if (previewName) previewName.textContent = file.name;
     }
-  } catch (err) {
-    console.error('Upload failed:', err);
-    if (previewName) previewName.textContent = 'Upload failed. File too large or invalid format.';
-  }
+  } catch {}
 }
 
 // ==========================================

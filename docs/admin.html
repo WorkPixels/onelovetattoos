@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One Love Tattoos | Studio Admin Dashboard</title>
+  <link rel="icon" type="image/svg+xml" href="static/favicon.svg">
+  <link rel="stylesheet" href="static/css/admin.css">
+  <style>
+    /* Full-screen Login overlay if not authenticated */
+    .admin-login-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #151922 0%, #080a0d 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 9999;
+    }
+    .login-card {
+      background: var(--admin-card-bg);
+      border: 1px solid var(--admin-border-accent);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 175, 55, 0.15);
+    }
+    .demo-credentials {
+      background: rgba(212, 175, 55, 0.08);
+      border: 1px dashed var(--admin-gold);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-size: 0.82rem;
+      margin-bottom: 24px;
+      color: #e2e8f0;
+    }
+    .demo-credentials code {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--admin-gold);
+      font-family: monospace;
+    }
+    .error-alert {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .form-label {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: var(--admin-sidebar-bg);
+      border: 1px solid var(--admin-border);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--admin-gold);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       LOGIN VIEW (SHOWN IF NOT AUTHENTICATED)
+       ========================================== -->
+  <div class="admin-login-overlay" id="adminLoginView" style="display: flex;">
+    <div class="login-card">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <div style="width: 52px; height: 52px; margin: 0 auto 14px; border-radius: 50%; background: radial-gradient(circle, #2a2211, #131720); border: 1px solid var(--admin-gold); display: flex; align-items: center; justify-content: center; color: var(--admin-gold); font-size: 1.5rem;">
+          🔐
+        </div>
+        <h2 style="font-size: 1.4rem; color: #fff; margin-bottom: 4px;">Studio Admin Portal</h2>
+        <p style="font-size: 0.85rem; color: var(--text-dim);">One Love Tattoos & Piercing</p>
+      </div>
+
+      <div class="demo-credentials">
+        <div style="font-weight: 600; color: var(--admin-gold); margin-bottom: 4px;">🔑 Studio Login:</div>
+        <div>Username: <code>admin</code></div>
+        <div>Password: <code>onelove2026</code></div>
+      </div>
+
+      <div id="loginError" class="error-alert"></div>
+
+      <form id="adminLoginForm">
+        <div class="form-group">
+          <label class="form-label" for="loginUsername">Username</label>
+          <input type="text" id="loginUsername" class="form-input" value="admin" required />
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label class="form-label" for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" class="form-input" value="onelove2026" required />
+        </div>
+
+        <button type="submit" class="btn-admin btn-admin-gold" style="width: 100%; justify-content: center; padding: 12px;">
+          Enter Admin Dashboard
+        </button>
+
+        <div style="text-align: center; margin-top: 18px;">
+          <a href="index.html" style="font-size: 0.85rem; color: var(--text-muted); text-decoration: none;">
+            ← Return to Public Website
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       DASHBOARD VIEW (SHOWN WHEN AUTHENTICATED)
+       ========================================== -->
+  <div id="adminDashboardView" style="display: none; width: 100%; min-height: 100vh;">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="admin-brand">
+        <div class="admin-brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        </div>
+        <div>
+          <div class="admin-brand-title">ONE LOVE</div>
+          <span class="admin-brand-badge">ADMIN PORTAL</span>
+        </div>
+      </div>
+
+      <ul class="sidebar-nav">
+        <li>
+          <button class="nav-item-btn active" data-tab="overview">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span>📊</span>
+              <span>Overview</span>
+            </div>
+          </button>
+        </li>
+        <li>
+          <button class="nav-item-btn" data-tab="photos">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span>🖼️</span>
+              <span>Manage Photos</span>
+            </div>
+          </button>
+        </li>
+        <li>
+          <button class="nav-item-btn" data-tab="inquiries">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span>📬</span>
+              <span>Inquiries</span>
+            </div>
+            <span class="nav-badge" id="sidebarInquiriesBadge" style="display: none;">0</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-item-btn" data-tab="artists">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span>🎨</span>
+              <span>Artists Roster</span>
+            </div>
+          </button>
+        </li>
+        <li>
+          <button class="nav-item-btn" data-tab="settings">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span>⚙️</span>
+              <span>Studio Settings</span>
+            </div>
+          </button>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <button onclick="exportPhotosJson()" class="btn-admin btn-admin-ghost" style="justify-content: center; font-size: 0.78rem;">
+          📥 Export photos.json
+        </button>
+        <a href="index.html" class="nav-item-btn" style="border: 1px solid var(--admin-border); justify-content: center;">
+          View Public Site ↗
+        </a>
+        <button onclick="adminLogout()" class="nav-item-btn" style="color: var(--admin-red); justify-content: center;">
+          Log Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Body -->
+    <main class="admin-main">
+      <header class="admin-header">
+        <div class="admin-header-title">
+          <h2 id="adminPageTitle">Dashboard Overview</h2>
+        </div>
+        <div class="admin-header-actions">
+          <button id="openAddPhotoModal" class="btn-admin btn-admin-gold">
+            + Add New Photo
+          </button>
+          <a href="index.html" class="btn-admin btn-admin-ghost">
+            Live Website ↗
+          </a>
+        </div>
+      </header>
+
+      <div class="admin-body">
+        <!-- Top Metrics Row -->
+        <div class="metrics-row">
+          <div class="stat-card">
+            <div class="stat-icon gold">🖼️</div>
+            <div class="stat-meta">
+              <span class="stat-number" id="statTotalPhotos">0</span>
+              <span class="stat-title">Gallery Photos</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon teal">★</div>
+            <div class="stat-meta">
+              <span class="stat-number" id="statFeaturedPhotos">0</span>
+              <span class="stat-title">Featured on Home</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon red">📬</div>
+            <div class="stat-meta">
+              <span class="stat-number" id="statNewInquiries">0</span>
+              <span class="stat-title">New Inquiries</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon blue">🎨</div>
+            <div class="stat-meta">
+              <span class="stat-number" id="statTotalArtists">0</span>
+              <span class="stat-title">Resident Artists</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: OVERVIEW -->
+        <section class="admin-tab-content active" id="tab-overview">
+          <div class="content-card">
+            <div class="card-header-bar">
+              <h3 class="card-title">Studio Snapshot</h3>
+              <button class="btn-admin btn-admin-gold" onclick="document.querySelector('[data-tab=photos]').click()">
+                Go to Photos Manager ➔
+              </button>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+              <div style="background: var(--admin-sidebar-bg); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--admin-border);">
+                <div style="font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase;">Shop Location</div>
+                <div style="color: #fff; font-weight: 600; margin-top: 4px;">1202 Williams Drive, Ste A/B, Georgetown, TX</div>
+              </div>
+              <div style="background: var(--admin-sidebar-bg); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--admin-border);">
+                <div style="font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase;">Studio Hours</div>
+                <div style="color: #fff; font-weight: 600; margin-top: 4px;">Monday - Sunday: 12:00 PM - 8:00 PM</div>
+              </div>
+              <div style="background: var(--admin-sidebar-bg); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--admin-border);">
+                <div style="font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase;">Direct Phone</div>
+                <div style="color: #fff; font-weight: 600; margin-top: 4px;">(512) 868-1588</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB: PHOTOS -->
+        <section class="admin-tab-content" id="tab-photos">
+          <div class="content-card">
+            <div class="card-header-bar">
+              <div>
+                <h3 class="card-title">Photo Gallery Management</h3>
+                <p style="font-size: 0.85rem; color: var(--text-dim); margin-top: 4px;">
+                  Add, edit, tag, feature, and delete tattoo photos shown in your live gallery.
+                </p>
+              </div>
+              <div class="card-controls">
+                <input type="text" id="adminPhotoSearch" class="admin-search-input" placeholder="Search photos by title, artist, tags..." />
+                <select id="adminPhotoCategory" class="admin-select">
+                  <option value="all">All Categories</option>
+                  <option value="Black & Grey">Black & Grey</option>
+                  <option value="Traditional">Traditional</option>
+                  <option value="Realism">Realism</option>
+                  <option value="Japanese">Japanese</option>
+                  <option value="Fine Line">Fine Line</option>
+                  <option value="Piercings">Piercings</option>
+                  <option value="Flash & Studio">Flash & Studio</option>
+                </select>
+                <button class="btn-admin btn-admin-gold" onclick="document.getElementById('openAddPhotoModal').click()">
+                  + Add Photo
+                </button>
+              </div>
+            </div>
+
+            <div class="admin-photos-grid" id="adminPhotosContainer"></div>
+          </div>
+        </section>
+
+        <!-- TAB: INQUIRIES -->
+        <section class="admin-tab-content" id="tab-inquiries">
+          <div class="content-card">
+            <div class="card-header-bar">
+              <div>
+                <h3 class="card-title">Consultation Inquiries Inbox</h3>
+                <p style="font-size: 0.85rem; color: var(--text-dim); margin-top: 4px;">
+                  Review customer booking requests and uploaded reference images.
+                </p>
+              </div>
+              <div class="card-controls">
+                <select id="inquiryStatusFilter" class="admin-select">
+                  <option value="all">All Inquiries</option>
+                  <option value="New">New Only</option>
+                  <option value="Contacted">Contacted</option>
+                  <option value="Booked">Booked</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Archived">Archived</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Client</th>
+                    <th>Contact Info</th>
+                    <th>Artist & Style</th>
+                    <th>Concept & Sizing</th>
+                    <th>Reference</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="inquiriesTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB: ARTISTS -->
+        <section class="admin-tab-content" id="tab-artists">
+          <div style="display: grid; grid-template-columns: 1fr 1.6fr; gap: 24px;">
+            <div class="content-card">
+              <div class="card-header-bar">
+                <h3 class="card-title">Add New Artist Profile</h3>
+              </div>
+              <form id="addArtistForm">
+                <div class="form-group">
+                  <label class="form-label">Full Name *</label>
+                  <input type="text" id="artistName" class="form-input" placeholder="e.g. Leo Vance" required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Role / Title</label>
+                  <input type="text" id="artistRole" class="form-input" placeholder="Resident Tattooer" value="Resident Tattooer" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Specialties</label>
+                  <input type="text" id="artistSpecialties" class="form-input" placeholder="e.g. Realism • Portraits • Black & Grey" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Bio</label>
+                  <textarea id="artistBio" class="form-textarea" placeholder="Artist background..." style="min-height: 80px;"></textarea>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Avatar Image URL</label>
+                  <input type="url" id="artistAvatarUrl" class="form-input" placeholder="https://..." />
+                </div>
+                <button type="submit" class="btn-admin btn-admin-gold" style="width: 100%;">
+                  Save Artist Profile
+                </button>
+              </form>
+            </div>
+
+            <div class="content-card">
+              <div class="card-header-bar">
+                <h3 class="card-title">Active Resident Artists</h3>
+              </div>
+              <div id="adminArtistsContainer" style="display: flex; flex-direction: column; gap: 14px;"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB: SETTINGS -->
+        <section class="admin-tab-content" id="tab-settings">
+          <div class="content-card" style="max-width: 600px;">
+            <div class="card-header-bar">
+              <h3 class="card-title">Public Studio Information</h3>
+            </div>
+            <form id="studioSettingsForm">
+              <div class="form-group">
+                <label class="form-label">Studio Name</label>
+                <input type="text" name="studio_name" class="form-input" value="One Love Tattoos" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Announcement Banner</label>
+                <input type="text" name="announcement" class="form-input" value="🔥 Walk-ins welcome daily 12-8 PM!" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Physical Address</label>
+                <input type="text" name="address" class="form-input" value="1202 Williams Drive, Suite A/B, Georgetown, TX 78628" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input type="text" name="phone" class="form-input" value="(512) 868-1588" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Operating Hours</label>
+                <input type="text" name="hours" class="form-input" value="Monday - Sunday: 12:00 PM - 8:00 PM" />
+              </div>
+              <button type="submit" class="btn-admin btn-admin-gold">
+                Save Studio Information
+              </button>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- ADD / EDIT PHOTO MODAL -->
+  <div class="admin-modal" id="photoModal">
+    <div class="admin-modal-card">
+      <div class="admin-modal-header">
+        <h3 id="photoModalTitle">Add New Tattoo Photo</h3>
+        <button class="admin-modal-close" id="closePhotoModal">✕</button>
+      </div>
+
+      <form id="addPhotoForm">
+        <input type="hidden" id="editPhotoId" value="" />
+
+        <div class="admin-dropzone" id="adminPhotoDropzone">
+          <div style="font-size: 2rem; color: var(--admin-gold); margin-bottom: 6px;">📤</div>
+          <div style="font-weight: 600; color: #fff; margin-bottom: 4px;">Drag & drop image file or click to upload</div>
+          <div style="font-size: 0.75rem; color: var(--text-dim);">Files are loaded directly into browser storage</div>
+          <input type="file" id="adminPhotoFileInput" accept="image/*" style="display: none;" />
+        </div>
+
+        <div id="photoPreviewThumb" style="display: none; align-items: center; gap: 12px; margin-bottom: 16px; background: var(--admin-sidebar-bg); padding: 8px 12px; border-radius: var(--radius-sm);">
+          <img id="photoPreviewImg" src="" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;" alt="Preview" />
+          <span style="font-size: 0.82rem; color: var(--admin-gold);">Image loaded</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Or Image URL</label>
+          <input type="url" id="photoImageUrl" class="form-input" placeholder="https://images.unsplash.com/..." required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Photo Title *</label>
+          <input type="text" id="photoTitle" class="form-input" placeholder="e.g. Geometric Sleeve" required />
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select id="photoCategory" class="form-select">
+              <option value="Black & Grey">Black & Grey</option>
+              <option value="Traditional">Traditional</option>
+              <option value="Realism">Realism</option>
+              <option value="Japanese">Japanese</option>
+              <option value="Fine Line">Fine Line</option>
+              <option value="Piercings">Piercings</option>
+              <option value="Flash & Studio">Flash & Studio</option>
+              <option value="Custom">Custom</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Artist Name</label>
+            <select id="photoArtist" class="form-select"></select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Tags (comma-separated)</label>
+          <input type="text" id="photoTags" class="form-input" placeholder="e.g. wolf, forearm, dark, realism" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea id="photoDesc" class="form-textarea" placeholder="Details about this tattoo..." style="min-height: 70px;"></textarea>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding: 10px 14px; background: var(--admin-sidebar-bg); border-radius: var(--radius-sm);">
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 0.88rem; color: #fff; cursor: pointer;">
+            <input type="checkbox" id="photoFeatured" style="accent-color: var(--admin-gold);" />
+            <span>Feature on Homepage Highlight Reel</span>
+          </label>
+
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="font-size: 0.8rem; color: var(--text-dim);">Sort Order:</span>
+            <input type="number" id="photoSortOrder" class="form-input" style="width: 60px; padding: 4px 8px; text-align: center;" value="0" />
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button type="button" class="btn-admin btn-admin-ghost" onclick="document.getElementById('photoModal').classList.remove('active')">Cancel</button>
+          <button type="submit" class="btn-admin btn-admin-gold">Save Photo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="admin-toast-container"></div>
+
+  <script src="static/js/admin-static.js"></script>
+</body>
+</html>
