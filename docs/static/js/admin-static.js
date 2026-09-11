@@ -341,11 +341,26 @@ async function loadInitialData() {
   if (cachedInquiries) {
     try {
       adminInquiries = JSON.parse(cachedInquiries);
+      let updated = false;
+      adminInquiries.forEach(inq => {
+        if (!inq.artist_notes) {
+          const match = DEFAULT_INQUIRIES.find(d => String(d.id) === String(inq.id));
+          if (match && match.artist_notes) {
+            inq.artist_notes = match.artist_notes;
+            updated = true;
+          } else if (inq.artist_notes === undefined) {
+            inq.artist_notes = '';
+            updated = true;
+          }
+        }
+      });
+      if (updated) saveInquiries();
     } catch {
-      adminInquiries = DEFAULT_INQUIRIES;
+      adminInquiries = [...DEFAULT_INQUIRIES];
+      saveInquiries();
     }
   } else {
-    adminInquiries = DEFAULT_INQUIRIES;
+    adminInquiries = [...DEFAULT_INQUIRIES];
     saveInquiries();
   }
 
@@ -406,6 +421,12 @@ function initTabs() {
       }
     });
   });
+
+  if (window.location.hash) {
+    const hash = window.location.hash.replace('#', '');
+    const matchingBtn = document.querySelector(`.nav-item-btn[data-tab="${hash}"]`);
+    if (matchingBtn) matchingBtn.click();
+  }
 }
 
 function refreshStats() {
@@ -698,6 +719,10 @@ function filterInquiries() {
       <td>
         <div style="font-weight: 600; color: #fff;">${escapeHtml(i.client_name)}</div>
         <div style="font-size: 0.78rem; color: var(--text-muted);">${formatDate(i.created_at)}</div>
+        <button class="btn-admin btn-admin-gold" style="margin-top: 8px; padding: 4px 10px; font-size: 0.74rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 2px 8px rgba(212,175,55,0.25);" onclick="openInquiryNotesModal(${i.id})">
+          📝 ${i.artist_notes ? 'View / Edit Notes' : '+ Add Artist Notes'}
+        </button>
+        ${i.artist_notes ? `<div style="font-size: 0.72rem; color: var(--admin-gold); margin-top: 4px; font-style: italic; max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(i.artist_notes)}">💬 "${escapeHtml(i.artist_notes)}"</div>` : ''}
       </td>
       <td>
         <div><a href="mailto:${escapeHtml(i.client_email)}" style="color: var(--admin-blue); text-decoration: underline;">${escapeHtml(i.client_email)}</a></div>
@@ -722,17 +747,25 @@ function filterInquiries() {
           </a>
         ` : `<span style="color: var(--text-muted); font-size: 0.78rem;">None</span>`}
       </td>
-      <td>
-        <div style="min-width: 220px; display: flex; flex-direction: column; gap: 6px;">
+      <td style="background: rgba(212,175,55,0.04); border-left: 1px solid rgba(212,175,55,0.2); border-right: 1px solid rgba(212,175,55,0.2);">
+        <div style="min-width: 240px; display: flex; flex-direction: column; gap: 6px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.72rem; font-weight: 800; color: var(--admin-gold); text-transform: uppercase; letter-spacing: 0.06em;">
+              📝 Client Discussion Notes:
+            </span>
+            <button class="btn-admin btn-admin-ghost" style="padding: 2px 6px; font-size: 0.68rem; border-color: rgba(212,175,55,0.4);" onclick="openInquiryNotesModal(${i.id})" title="Open full-screen notes modal">
+              ⛶ Modal
+            </button>
+          </div>
           <textarea 
             id="inquiry-notes-${i.id}" 
             class="form-textarea" 
-            placeholder="Add consultation notes from chatting with client..." 
-            style="font-size: 0.8rem; min-height: 62px; padding: 6px 8px; line-height: 1.35; resize: vertical; background: rgba(0,0,0,0.35); border: 1px solid var(--admin-border); color: #fff; border-radius: 4px; width: 100%;"
+            placeholder="Enter notes from chatting with client (deposit, sizing, custom placement, dates)..." 
+            style="font-size: 0.82rem; min-height: 70px; padding: 6px 8px; line-height: 1.35; resize: vertical; background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.45); color: #fff; border-radius: 4px; width: 100%;"
           >${escapeHtml(i.artist_notes || '')}</textarea>
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span id="notes-status-${i.id}" style="font-size: 0.72rem; color: var(--accent-gold, #d4af37);"></span>
-            <button class="btn-admin btn-admin-gold" style="padding: 3px 10px; font-size: 0.72rem; font-weight: 600;" onclick="saveInquiryNotes(${i.id})">
+            <span id="notes-status-${i.id}" style="font-size: 0.72rem; color: #34d399; font-weight: 600;"></span>
+            <button class="btn-admin btn-admin-gold" style="padding: 4px 12px; font-size: 0.74rem; font-weight: 700;" onclick="saveInquiryNotes(${i.id})">
               💾 Save Note
             </button>
           </div>
@@ -748,13 +781,79 @@ function filterInquiries() {
         </select>
       </td>
       <td>
-        <button class="btn-admin btn-admin-danger" style="padding: 4px 8px; font-size: 0.75rem;" onclick="deleteInquiry(${i.id})">
-          Delete
-        </button>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <button class="btn-admin btn-admin-gold" style="padding: 4px 8px; font-size: 0.74rem; font-weight: 600;" onclick="openInquiryNotesModal(${i.id})">
+            📝 Notes
+          </button>
+          <button class="btn-admin btn-admin-danger" style="padding: 4px 8px; font-size: 0.74rem;" onclick="deleteInquiry(${i.id})">
+            Delete
+          </button>
+        </div>
       </td>
     </tr>
   `).join('');
 }
+
+let currentModalInquiryId = null;
+
+window.openInquiryNotesModal = function(id) {
+  const inq = adminInquiries.find(i => String(i.id) === String(id));
+  if (!inq) return;
+
+  currentModalInquiryId = id;
+  const modal = document.getElementById('inquiryNotesModal');
+  const title = document.getElementById('inquiryNotesModalTitle');
+  const info = document.getElementById('inquiryNotesModalClientInfo');
+  const textarea = document.getElementById('modalInquiryNotesText');
+  const statusSpan = document.getElementById('modalNotesStatus');
+
+  if (title) title.textContent = `📝 Artist Consultation Notes: ${inq.client_name}`;
+  if (info) {
+    info.innerHTML = `
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+        <div><strong style="color: #fff;">Client:</strong> ${escapeHtml(inq.client_name)}</div>
+        <div><strong style="color: #fff;">Preferred Artist:</strong> <span style="color: var(--admin-gold);">${escapeHtml(inq.preferred_artist)}</span></div>
+        <div><strong style="color: #fff;">Email:</strong> <a href="mailto:${escapeHtml(inq.client_email)}" style="color: var(--admin-blue);">${escapeHtml(inq.client_email)}</a></div>
+        <div><strong style="color: #fff;">Phone:</strong> ${inq.client_phone ? `<a href="tel:${escapeHtml(inq.client_phone)}" style="color: var(--text-main);">${escapeHtml(inq.client_phone)}</a>` : 'Not provided'}</div>
+      </div>
+      <div style="border-top: 1px solid var(--admin-border); padding-top: 8px; margin-top: 8px;">
+        <div><strong style="color: #fff;">Style & Placement:</strong> ${escapeHtml(inq.tattoo_style)} • ${escapeHtml(inq.placement)} | Size: ${escapeHtml(inq.estimated_size)} | Budget: ${escapeHtml(inq.budget)}</div>
+        <div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 4px;">"${escapeHtml(inq.description)}"</div>
+      </div>
+    `;
+  }
+  if (textarea) textarea.value = inq.artist_notes || '';
+  if (statusSpan) statusSpan.textContent = '';
+  if (modal) modal.classList.add('active');
+};
+
+window.closeInquiryNotesModal = function() {
+  const modal = document.getElementById('inquiryNotesModal');
+  if (modal) modal.classList.remove('active');
+  currentModalInquiryId = null;
+};
+
+window.saveModalInquiryNotes = function() {
+  if (!currentModalInquiryId) return;
+  const textarea = document.getElementById('modalInquiryNotesText');
+  const statusSpan = document.getElementById('modalNotesStatus');
+  if (!textarea) return;
+
+  const notes = textarea.value.trim();
+  const inq = adminInquiries.find(i => String(i.id) === String(currentModalInquiryId));
+  if (inq) {
+    inq.artist_notes = notes;
+    saveInquiries();
+    if (statusSpan) {
+      statusSpan.textContent = '✓ Saved successfully!';
+      setTimeout(() => { if (statusSpan) statusSpan.textContent = ''; }, 2500);
+    }
+    const rowTextarea = document.getElementById(`inquiry-notes-${currentModalInquiryId}`);
+    if (rowTextarea) rowTextarea.value = notes;
+    adminToast('Artist consultation notes saved!', 'success');
+    filterInquiries();
+  }
+};
 
 window.saveInquiryNotes = function(id) {
   const textarea = document.getElementById(`inquiry-notes-${id}`);

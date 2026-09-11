@@ -261,6 +261,20 @@
                 Go to Photos Manager ➔
               </button>
             </div>
+            <div style="margin-bottom: 20px; background: linear-gradient(135deg, rgba(212,175,55,0.14), rgba(13,15,20,0.9)); border: 1px solid var(--admin-gold); padding: 18px 22px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+              <div>
+                <div style="font-weight: 700; color: #fff; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+                  <span>📬 Consultation Inquiries & Artist Notes</span>
+                  <span style="background: var(--admin-gold); color: #000; font-size: 0.7rem; padding: 2px 8px; border-radius: 999px; font-weight: 800;">ARTIST NOTES</span>
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.84rem; margin-top: 4px;">
+                  Review incoming client requests, record conversation notes from phone/chat, and update booking status.
+                </div>
+              </div>
+              <button class="btn-admin btn-admin-gold" style="font-weight: 700; padding: 8px 16px;" onclick="document.querySelector('[data-tab=inquiries]').click()">
+                Open Inquiries & Enter Notes ➔
+              </button>
+            </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
               <div style="background: var(--admin-sidebar-bg); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--admin-border);">
                 <div style="font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase;">Shop Location</div>
@@ -436,6 +450,35 @@
     </main>
   </div>
 
+  <!-- CONSULTATION INQUIRY NOTES MODAL -->
+  <div class="admin-modal" id="inquiryNotesModal">
+    <div class="admin-modal-card" style="max-width: 650px;">
+      <div class="admin-modal-header">
+        <h3 id="inquiryNotesModalTitle">📝 Artist Consultation Notes</h3>
+        <button class="admin-modal-close" onclick="closeInquiryNotesModal()">✕</button>
+      </div>
+      <div id="inquiryNotesModalClientInfo" style="padding: 12px 16px; background: var(--admin-sidebar-bg); border-radius: var(--radius-sm); margin-bottom: 16px; border: 1px solid var(--admin-border); font-size: 0.85rem; line-height: 1.6;"></div>
+      <div class="form-group" style="margin-bottom: 16px;">
+        <label class="form-label" style="font-weight: 600; color: var(--admin-gold); font-size: 0.9rem;">
+          Artist Discussion & Chat Notes:
+        </label>
+        <p style="font-size: 0.78rem; color: var(--text-dim); margin-bottom: 8px;">
+          Record all discussion notes from chatting with the client: placement nuances, price quote, deposit status ($50-$250), custom reference preferences, booking date, or health considerations.
+        </p>
+        <textarea id="modalInquiryNotesText" class="form-textarea" placeholder="Type artist consultation notes from chatting with client..." style="min-height: 150px; font-size: 0.9rem; line-height: 1.5; background: rgba(0,0,0,0.4); border-color: rgba(212,175,55,0.4); color: #fff;"></textarea>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid var(--admin-border);">
+        <span id="modalNotesStatus" style="font-size: 0.82rem; color: #34d399; font-weight: 600;"></span>
+        <div style="display: flex; gap: 10px;">
+          <button type="button" class="btn-admin btn-admin-ghost" onclick="closeInquiryNotesModal()">Close</button>
+          <button type="button" class="btn-admin btn-admin-gold" id="btnSaveModalNotes" onclick="saveModalInquiryNotes()">
+            💾 Save Consultation Notes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ADD / EDIT PHOTO MODAL -->
   <div class="admin-modal" id="photoModal">
     <div class="admin-modal-card">
@@ -522,6 +565,6 @@
 
   <div class="admin-toast-container"></div>
 
-  <script src="static/js/admin-static.js"></script>
+  <script src="static/js/admin-static.js?v=20260911_v3"></script>
 </body>
 </html>
