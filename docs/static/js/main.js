@@ -177,89 +177,24 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// Theme Management (5 Preset Themes)
+// Theme Management (Admin Studio Settings Controlled)
 // ==========================================
 function initTheme() {
-  const themeToggleBtn = document.getElementById('themeToggleBtn');
-  const themeMenu = document.getElementById('themeMenu');
-  const themeOptBtns = document.querySelectorAll('.theme-opt-btn');
+  let studioTheme = 'dark-gold';
+  try {
+    const s = localStorage.getItem('onelove_settings');
+    if (s) {
+      const parsed = JSON.parse(s);
+      if (parsed && parsed.theme) studioTheme = parsed.theme;
+    }
+  } catch(e) {}
 
-  let currentTheme = localStorage.getItem('onelove_theme');
-  if (!currentTheme) {
-    try {
-      const s = localStorage.getItem('onelove_settings');
-      if (s) {
-        const parsed = JSON.parse(s);
-        if (parsed && parsed.theme) currentTheme = parsed.theme;
-      }
-    } catch(e) {}
-  }
-  if (!currentTheme) currentTheme = 'dark-gold';
-
-  setTheme(currentTheme, false);
-
-  if (themeToggleBtn && themeMenu) {
-    themeToggleBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      themeMenu.classList.toggle('show');
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!themeMenu.contains(e.target) && e.target !== themeToggleBtn) {
-        themeMenu.classList.remove('show');
-      }
-    });
-  }
-
-  themeOptBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const selected = btn.dataset.setTheme;
-      setTheme(selected, true);
-      if (themeMenu) themeMenu.classList.remove('show');
-    });
-  });
+  applyTheme(studioTheme);
 }
 
-function setTheme(themeName, persist = true) {
+function applyTheme(themeName) {
+  if (!themeName) themeName = 'dark-gold';
   document.documentElement.setAttribute('data-theme', themeName);
-  if (persist) {
-    try {
-      localStorage.setItem('onelove_theme', themeName);
-    } catch (e) {}
-  }
-
-  const themeOptBtns = document.querySelectorAll('.theme-opt-btn');
-  themeOptBtns.forEach(btn => {
-    if (btn.dataset.setTheme === themeName) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
-  });
-
-  const currentLabel = document.querySelector('.theme-current-label');
-  const themeIcon = document.querySelector('.theme-icon');
-  if (currentLabel) {
-    if (themeName === 'clean-light') {
-      currentLabel.textContent = 'Light';
-      if (themeIcon) themeIcon.textContent = '☀️';
-    } else if (themeName === 'dark-gold') {
-      currentLabel.textContent = 'Dark Gold';
-      if (themeIcon) themeIcon.textContent = '👑';
-    } else if (themeName === 'midnight-crimson') {
-      currentLabel.textContent = 'Crimson';
-      if (themeIcon) themeIcon.textContent = '🌹';
-    } else if (themeName === 'emerald-noir') {
-      currentLabel.textContent = 'Emerald';
-      if (themeIcon) themeIcon.textContent = '🌿';
-    } else if (themeName === 'cyber-ink') {
-      currentLabel.textContent = 'Cyber';
-      if (themeIcon) themeIcon.textContent = '⚡';
-    } else {
-      currentLabel.textContent = 'Theme';
-      if (themeIcon) themeIcon.textContent = '🎨';
-    }
-  }
 }
 
 // ==========================================
@@ -317,8 +252,8 @@ function applyStudioSettings(settings) {
       el.textContent = settings.address;
     });
   }
-  if (settings.theme && !localStorage.getItem('onelove_theme')) {
-    setTheme(settings.theme, false);
+  if (settings.theme) {
+    applyTheme(settings.theme);
   }
   if (settings.logo_url !== undefined) {
     const brandIcons = document.querySelectorAll('.brand-icon');
