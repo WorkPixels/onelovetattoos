@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff2c5"/>
+      <stop offset="50%" stop-color="#d4af37"/>
+      <stop offset="100%" stop-color="#a8841a"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="30" fill="#0d0f14" stroke="url(#gold)" stroke-width="2.5"/>
+  <path d="M32 46.7l-2.9-2.64C18.8 34.72 12 28.56 12 21c0-6.16 4.84-11 11-11 3.48 0 6.82 1.62 9 4.18C34.18 11.62 37.52 10 41 10c6.16 0 11 4.84 11 11 0 7.56-6.8 13.72-17.1 23.08L32 46.7z" fill="url(#gold)" opacity="0.9"/>
+  <!-- Tattoo machine needle subtle detail -->
+  <path d="M32 16 L32 38" stroke="#0d0f14" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="32" cy="22" r="3" fill="#0d0f14"/>
+</svg>
