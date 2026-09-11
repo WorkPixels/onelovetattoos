@@ -1,11 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="{{ settings.get('theme', 'dark-gold') }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>One Love Tattoos | Studio Admin Dashboard</title>
   <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
   <link rel="stylesheet" href="/static/css/admin.css">
+  <script>
+    (function() {
+      try {
+        var s = localStorage.getItem('onelove_settings');
+        var t = "{{ settings.get('theme', 'dark-gold') }}";
+        if (s) {
+          var parsed = JSON.parse(s);
+          if (parsed && parsed.theme) t = parsed.theme;
+        }
+        if (t) document.documentElement.setAttribute('data-theme', t);
+      } catch(e) {}
+    })();
+  </script>
 </head>
 <body>
 

@@ -717,6 +717,7 @@ function initSettingsManagement() {
   }
 
   function selectTheme(themeName) {
+    if (!themeName) themeName = 'dark-gold';
     if (themeInput) themeInput.value = themeName;
     themeCards.forEach(card => {
       if (card.dataset.themeVal === themeName) {
@@ -725,6 +726,7 @@ function initSettingsManagement() {
         card.classList.remove('active');
       }
     });
+    document.documentElement.setAttribute('data-theme', themeName);
   }
 
   themeCards.forEach(card => {

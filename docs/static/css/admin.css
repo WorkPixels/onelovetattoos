@@ -4,7 +4,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap');
 
-:root {
+/* ==========================================================================
+   THEME 1: SIGNATURE DARK GOLD (DEFAULT)
+   ========================================================================== */
+:root, [data-theme="dark-gold"] {
   --admin-bg-dark: #090b0e;
   --admin-sidebar-bg: #0f1217;
   --admin-card-bg: #141820;
@@ -29,6 +32,255 @@
   --radius-lg: 16px;
 
   --transition: 0.2s ease-in-out;
+}
+
+/* ==========================================================================
+   THEME 2: CLEAN STUDIO LIGHT (CONTRAST LIGHT GALLERY)
+   ========================================================================== */
+[data-theme="clean-light"] {
+  --admin-bg-dark: #f8fafc;
+  --admin-sidebar-bg: #ffffff;
+  --admin-card-bg: #ffffff;
+  --admin-card-hover: #f1f5f9;
+  --admin-border: rgba(15, 23, 42, 0.12);
+  --admin-border-accent: rgba(180, 138, 23, 0.5);
+
+  --admin-gold: #b48a17;
+  --admin-gold-hover: #8a680b;
+  --admin-teal: #0d9488;
+  --admin-blue: #2563eb;
+  --admin-purple: #7c3aed;
+  --admin-red: #dc2626;
+  --admin-amber: #d97706;
+
+  --text-main: #0f172a;
+  --text-dim: #475569;
+  --text-muted: #64748b;
+}
+
+/* ==========================================================================
+   THEME 3: MIDNIGHT CRIMSON (AMERICANA TRADITIONAL)
+   ========================================================================== */
+[data-theme="midnight-crimson"] {
+  --admin-bg-dark: #09090d;
+  --admin-sidebar-bg: #0e0d14;
+  --admin-card-bg: #161420;
+  --admin-card-hover: #221d30;
+  --admin-border: rgba(225, 29, 72, 0.2);
+  --admin-border-accent: rgba(225, 29, 72, 0.55);
+
+  --admin-gold: #e11d48;
+  --admin-gold-hover: #fb7185;
+  --admin-teal: #f43f5e;
+  --admin-blue: #38bdf8;
+  --admin-purple: #c084fc;
+  --admin-red: #e11d48;
+  --admin-amber: #fb923c;
+
+  --text-main: #fff1f2;
+  --text-dim: #fda4af;
+  --text-muted: #e11d48;
+}
+
+/* ==========================================================================
+   THEME 4: EMERALD NOIR (BOTANICAL & FINE LINE)
+   ========================================================================== */
+[data-theme="emerald-noir"] {
+  --admin-bg-dark: #050a07;
+  --admin-sidebar-bg: #07130b;
+  --admin-card-bg: #0d2114;
+  --admin-card-hover: #13331f;
+  --admin-border: rgba(16, 185, 129, 0.2);
+  --admin-border-accent: rgba(16, 185, 129, 0.55);
+
+  --admin-gold: #10b981;
+  --admin-gold-hover: #34d399;
+  --admin-teal: #10b981;
+  --admin-blue: #06b6d4;
+  --admin-purple: #a855f7;
+  --admin-red: #f43f5e;
+  --admin-amber: #f59e0b;
+
+  --text-main: #ecfdf5;
+  --text-dim: #a7f3d0;
+  --text-muted: #6ee7b7;
+}
+
+/* ==========================================================================
+   THEME 5: CYBER INK (ELECTRIC SURREALISM)
+   ========================================================================== */
+[data-theme="cyber-ink"] {
+  --admin-bg-dark: #060714;
+  --admin-sidebar-bg: #0a0d24;
+  --admin-card-bg: #12183e;
+  --admin-card-hover: #1c245c;
+  --admin-border: rgba(99, 102, 241, 0.2);
+  --admin-border-accent: rgba(99, 102, 241, 0.55);
+
+  --admin-gold: #6366f1;
+  --admin-gold-hover: #818cf8;
+  --admin-teal: #06b6d4;
+  --admin-blue: #60a5fa;
+  --admin-purple: #a855f7;
+  --admin-red: #f43f5e;
+  --admin-amber: #fbbf24;
+
+  --text-main: #e0e7ff;
+  --text-dim: #a5b4fc;
+  --text-muted: #818cf8;
+}
+
+/* Clean Light Mode Adaptations */
+html[data-theme="clean-light"] {
+  color-scheme: light;
+}
+
+[data-theme="clean-light"] .admin-brand-title,
+[data-theme="clean-light"] .admin-header-title h2,
+[data-theme="clean-light"] .user-meta .username,
+[data-theme="clean-light"] .stat-number,
+[data-theme="clean-light"] .card-title,
+[data-theme="clean-light"] .admin-photo-title,
+[data-theme="clean-light"] .theme-card-title,
+[data-theme="clean-light"] .admin-modal-header h3,
+[data-theme="clean-light"] .form-label,
+[data-theme="clean-light"] .login-title {
+  color: #0f172a;
+}
+
+[data-theme="clean-light"] .nav-item-btn {
+  color: #475569;
+}
+
+[data-theme="clean-light"] .nav-item-btn:hover {
+  color: #0f172a;
+  background-color: rgba(15, 23, 42, 0.05);
+}
+
+[data-theme="clean-light"] .nav-item-btn.active {
+  background: rgba(180, 138, 23, 0.12);
+  color: #b48a17;
+  border-left-color: #b48a17;
+}
+
+[data-theme="clean-light"] .admin-search-input,
+[data-theme="clean-light"] .admin-select,
+[data-theme="clean-light"] .form-input,
+[data-theme="clean-light"] .form-select,
+[data-theme="clean-light"] .form-textarea {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: rgba(15, 23, 42, 0.18);
+}
+
+[data-theme="clean-light"] .admin-search-input:focus,
+[data-theme="clean-light"] .admin-select:focus,
+[data-theme="clean-light"] .form-input:focus,
+[data-theme="clean-light"] .form-select:focus,
+[data-theme="clean-light"] .form-textarea:focus {
+  border-color: #b48a17;
+  background: #ffffff;
+}
+
+[data-theme="clean-light"] .admin-table th {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.12);
+}
+
+[data-theme="clean-light"] .admin-table td {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  color: #334155;
+}
+
+[data-theme="clean-light"] .admin-table tbody tr:hover {
+  background-color: rgba(15, 23, 42, 0.03);
+}
+
+[data-theme="clean-light"] .admin-modal-card {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.15);
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.15);
+}
+
+[data-theme="clean-light"] .admin-modal-close {
+  color: #475569;
+}
+
+[data-theme="clean-light"] .admin-modal-close:hover {
+  color: #0f172a;
+}
+
+[data-theme="clean-light"] .btn-admin-ghost {
+  color: #475569;
+  border-color: rgba(15, 23, 42, 0.18);
+}
+
+[data-theme="clean-light"] .btn-admin-ghost:hover {
+  color: #0f172a;
+  background: rgba(15, 23, 42, 0.05);
+}
+
+[data-theme="clean-light"] .btn-admin-gold {
+  background: #b48a17;
+  color: #ffffff;
+}
+
+[data-theme="clean-light"] .btn-admin-gold:hover {
+  background: #8a680b;
+}
+
+[data-theme="clean-light"] .settings-logo-wrap {
+  background: #f8fafc;
+  border-color: rgba(15, 23, 42, 0.12);
+}
+
+[data-theme="clean-light"] .theme-card-option {
+  background: #f8fafc;
+  border-color: rgba(15, 23, 42, 0.15);
+}
+
+[data-theme="clean-light"] .theme-card-option:hover {
+  background: #ffffff;
+  border-color: #b48a17;
+}
+
+[data-theme="clean-light"] .theme-card-option.active {
+  background: rgba(180, 138, 23, 0.08);
+  border-color: #b48a17;
+}
+
+[data-theme="clean-light"] .admin-login-overlay {
+  background: radial-gradient(circle at center, #f8fafc 0%, #e2e8f0 100%);
+}
+
+[data-theme="clean-light"] .login-card {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.15);
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.15);
+}
+
+[data-theme="clean-light"] .demo-credentials {
+  background: rgba(180, 138, 23, 0.08);
+  border-color: #b48a17;
+  color: #334155;
+}
+
+[data-theme="clean-light"] .demo-credentials code {
+  background: rgba(15, 23, 42, 0.06);
+  color: #0f172a;
+}
+
+[data-theme="clean-light"] #inquiryNotesModalClientInfo {
+  background: #f8fafc !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  color: #334155 !important;
+}
+
+[data-theme="clean-light"] #modalInquiryNotesText {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: rgba(15, 23, 42, 0.2) !important;
 }
 
 *, *::before, *::after {

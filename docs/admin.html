@@ -5,7 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>One Love Tattoos | Studio Admin Dashboard</title>
   <link rel="icon" type="image/svg+xml" href="static/favicon.svg">
-  <link rel="stylesheet" href="static/css/admin.css?v=20260911_v5">
+  <link rel="stylesheet" href="static/css/admin.css?v=20260911_v8">
+  <script>
+    (function() {
+      try {
+        var s = localStorage.getItem('onelove_settings');
+        var t = 'dark-gold';
+        if (s) {
+          var parsed = JSON.parse(s);
+          if (parsed && parsed.theme) t = parsed.theme;
+        } else {
+          var cachedT = localStorage.getItem('onelove_theme');
+          if (cachedT) t = cachedT;
+        }
+        if (t) document.documentElement.setAttribute('data-theme', t);
+      } catch(e) {}
+    })();
+  </script>
   <style>
     /* Full-screen Login overlay if not authenticated */
     .admin-login-overlay {
@@ -666,6 +682,6 @@
 
   <div class="admin-toast-container"></div>
 
-  <script src="static/js/admin-static.js?v=20260911_v5"></script>
+  <script src="static/js/admin-static.js?v=20260911_v8"></script>
 </body>
 </html>
