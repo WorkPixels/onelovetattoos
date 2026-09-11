@@ -395,7 +395,7 @@ function filterInquiries() {
   if (filtered.length === 0) {
     container.innerHTML = `
       <tr>
-        <td colspan="7" style="text-align: center; padding: 36px; color: var(--text-dim);">
+        <td colspan="8" style="text-align: center; padding: 36px; color: var(--text-dim);">
           No consultation inquiries found with status "${currentStatus}".
         </td>
       </tr>
@@ -420,7 +420,7 @@ function filterInquiries() {
           <div style="font-size: 0.78rem; color: var(--text-dim);">${escapeHtml(i.tattoo_style)} • ${escapeHtml(i.placement)}</div>
         </td>
         <td>
-          <div style="max-width: 250px; font-size: 0.82rem; color: var(--text-main); white-space: normal; line-height: 1.4;">
+          <div style="max-width: 230px; font-size: 0.82rem; color: var(--text-main); white-space: normal; line-height: 1.4;">
             ${escapeHtml(i.description)}
           </div>
           <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px;">
@@ -433,6 +433,22 @@ function filterInquiries() {
               <img src="${i.reference_image_url}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 4px; border: 1px solid var(--admin-gold);" alt="Reference" />
             </a>
           ` : `<span style="color: var(--text-muted); font-size: 0.78rem;">None</span>`}
+        </td>
+        <td>
+          <div style="min-width: 220px; display: flex; flex-direction: column; gap: 6px;">
+            <textarea 
+              id="inquiry-notes-${i.id}" 
+              class="form-textarea" 
+              placeholder="Add consultation notes from chatting with client..." 
+              style="font-size: 0.8rem; min-height: 62px; padding: 6px 8px; line-height: 1.35; resize: vertical; background: rgba(0,0,0,0.35); border: 1px solid var(--admin-border); color: #fff; border-radius: 4px; width: 100%;"
+            >${escapeHtml(i.artist_notes || '')}</textarea>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span id="notes-status-${i.id}" style="font-size: 0.72rem; color: var(--accent-gold, #d4af37);"></span>
+              <button class="btn-admin btn-admin-gold" style="padding: 3px 10px; font-size: 0.72rem; font-weight: 600;" onclick="saveInquiryNotes(${i.id})">
+                💾 Save Note
+              </button>
+            </div>
+          </div>
         </td>
         <td>
           <select class="admin-select" style="font-size: 0.78rem; padding: 4px 8px;" onchange="updateInquiryStatus(${i.id}, this.value)">
@@ -452,6 +468,38 @@ function filterInquiries() {
     `;
   }).join('');
 }
+
+window.saveInquiryNotes = async function(id) {
+  const textarea = document.getElementById(`inquiry-notes-${id}`);
+  const statusSpan = document.getElementById(`notes-status-${id}`);
+  if (!textarea) return;
+
+  const notes = textarea.value.trim();
+  if (statusSpan) statusSpan.textContent = 'Saving...';
+
+  try {
+    const res = await fetch(`/api/admin/inquiries/${id}/notes`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ notes })
+    });
+    if (res.ok) {
+      const inq = allInquiries.find(item => String(item.id) === String(id));
+      if (inq) inq.artist_notes = notes;
+      if (statusSpan) {
+        statusSpan.textContent = '✓ Saved';
+        setTimeout(() => { if (statusSpan) statusSpan.textContent = ''; }, 2500);
+      }
+      adminToast('Artist notes saved successfully!', 'success');
+    } else {
+      if (statusSpan) statusSpan.textContent = 'Failed';
+      adminToast('Failed to save notes', 'error');
+    }
+  } catch (err) {
+    if (statusSpan) statusSpan.textContent = 'Error';
+    adminToast('Error saving notes', 'error');
+  }
+};
 
 window.updateInquiryStatus = async function(id, newStatus) {
   try {

@@ -236,6 +236,7 @@ const DEFAULT_INQUIRIES = [
     budget: "$400 - $600",
     description: "Looking for a realism piece with an hourglass surrounded by smoke and broken Roman numerals.",
     reference_image_url: "https://images.unsplash.com/photo-1568515045052-f9a854d70bfd?auto=format&fit=crop&w=600&q=80",
+    artist_notes: "Spoke on phone 9/10. Client wants smoke wrapping around forearm into outer wrist. $100 deposit paid. Consultation scheduled for Oct 12th at 2PM.",
     status: "New",
     created_at: new Date().toISOString()
   },
@@ -251,6 +252,7 @@ const DEFAULT_INQUIRIES = [
     budget: "$200 - $300",
     description: "Delicate fine line hummingbird feeding from a Texas bluebonnet stem.",
     reference_image_url: "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?auto=format&fit=crop&w=600&q=80",
+    artist_notes: "Emailed 3 custom stencil drafts on 9/11. Maya loves draft #2 with single-needle petal shading. Tentatively booking Oct 18th.",
     status: "Contacted",
     created_at: new Date(Date.now() - 86400000).toISOString()
   }
@@ -683,7 +685,7 @@ function filterInquiries() {
   if (filtered.length === 0) {
     container.innerHTML = `
       <tr>
-        <td colspan="7" style="text-align: center; padding: 36px; color: var(--text-dim);">
+        <td colspan="8" style="text-align: center; padding: 36px; color: var(--text-dim);">
           No consultation inquiries found with status "${currentStatus}".
         </td>
       </tr>
@@ -706,7 +708,7 @@ function filterInquiries() {
         <div style="font-size: 0.78rem; color: var(--text-dim);">${escapeHtml(i.tattoo_style)} • ${escapeHtml(i.placement)}</div>
       </td>
       <td>
-        <div style="max-width: 250px; font-size: 0.82rem; color: var(--text-main); line-height: 1.4;">
+        <div style="max-width: 230px; font-size: 0.82rem; color: var(--text-main); line-height: 1.4;">
           ${escapeHtml(i.description)}
         </div>
         <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px;">
@@ -719,6 +721,22 @@ function filterInquiries() {
             <img src="${i.reference_image_url}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 4px; border: 1px solid var(--admin-gold);" alt="Reference" />
           </a>
         ` : `<span style="color: var(--text-muted); font-size: 0.78rem;">None</span>`}
+      </td>
+      <td>
+        <div style="min-width: 220px; display: flex; flex-direction: column; gap: 6px;">
+          <textarea 
+            id="inquiry-notes-${i.id}" 
+            class="form-textarea" 
+            placeholder="Add consultation notes from chatting with client..." 
+            style="font-size: 0.8rem; min-height: 62px; padding: 6px 8px; line-height: 1.35; resize: vertical; background: rgba(0,0,0,0.35); border: 1px solid var(--admin-border); color: #fff; border-radius: 4px; width: 100%;"
+          >${escapeHtml(i.artist_notes || '')}</textarea>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span id="notes-status-${i.id}" style="font-size: 0.72rem; color: var(--accent-gold, #d4af37);"></span>
+            <button class="btn-admin btn-admin-gold" style="padding: 3px 10px; font-size: 0.72rem; font-weight: 600;" onclick="saveInquiryNotes(${i.id})">
+              💾 Save Note
+            </button>
+          </div>
+        </div>
       </td>
       <td>
         <select class="admin-select" style="font-size: 0.78rem; padding: 4px 8px;" onchange="updateInquiryStatus(${i.id}, this.value)">
@@ -737,6 +755,24 @@ function filterInquiries() {
     </tr>
   `).join('');
 }
+
+window.saveInquiryNotes = function(id) {
+  const textarea = document.getElementById(`inquiry-notes-${id}`);
+  const statusSpan = document.getElementById(`notes-status-${id}`);
+  if (!textarea) return;
+
+  const notes = textarea.value.trim();
+  const inq = adminInquiries.find(i => String(i.id) === String(id));
+  if (inq) {
+    inq.artist_notes = notes;
+    saveInquiries();
+    if (statusSpan) {
+      statusSpan.textContent = '✓ Saved';
+      setTimeout(() => { if (statusSpan) statusSpan.textContent = ''; }, 2500);
+    }
+    adminToast('Artist notes saved successfully!', 'success');
+  }
+};
 
 window.updateInquiryStatus = function(id, newStatus) {
   const inq = adminInquiries.find(i => String(i.id) === String(id));

@@ -15,12 +15,12 @@
     <div class="container ticker-content">
       <div style="display: flex; align-items: center; gap: 10px;">
         <span class="ticker-pulse"></span>
-        <span style="font-weight: 500;">{{ settings.get('announcement', '🔥 Walk-ins welcome daily 12-8 PM! Custom appointments require deposits ($50-$250).') }}</span>
+        <span class="studio-announcement" style="font-weight: 500;">{{ settings.get('announcement', '🔥 Walk-ins welcome daily 12-8 PM! Custom appointments require deposits ($50-$250).') }}</span>
       </div>
       <div class="ticker-links">
-        <a href="tel:{{ settings.get('phone', '(512) 868-1588') }}">📞 {{ settings.get('phone', '(512) 868-1588') }}</a>
+        <a href="tel:{{ settings.get('phone', '(512) 868-1588') }}" class="studio-phone-link">📞 <span class="studio-phone-text">{{ settings.get('phone', '(512) 868-1588') }}</span></a>
         <span>•</span>
-        <span>📍 {{ settings.get('address', '1202 Williams Dr, Georgetown, TX') }}</span>
+        <span>📍 <span class="studio-address-text">{{ settings.get('address', '1202 Williams Dr, Georgetown, TX') }}</span></span>
       </div>
     </div>
   </aside>
@@ -505,7 +505,7 @@
             <div class="info-icon">✉️</div>
             <div>
               <strong style="color: #fff; display: block; margin-bottom: 2px;">Email</strong>
-              <a href="mailto:{{ settings.get('email', 'onelovetattoos@gmail.com') }}" style="color: #cbd5e1;">
+              <a href="mailto:{{ settings.get('email', 'onelovetattoos@gmail.com') }}" class="studio-contact-email" style="color: #cbd5e1;">
                 {{ settings.get('email', 'onelovetattoos@gmail.com') }}
               </a>
             </div>

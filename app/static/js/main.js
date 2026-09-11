@@ -172,7 +172,65 @@ document.addEventListener('DOMContentLoaded', () => {
   initGallery();
   initBookingForm();
   initFaqAccordion();
+  initStudioSettings();
 });
+
+// ==========================================
+// Studio Settings Sync (Email, Phone, Hours, Announcement)
+// ==========================================
+async function initStudioSettings() {
+  let settings = null;
+
+  try {
+    const cached = localStorage.getItem('onelove_settings');
+    if (cached) {
+      settings = JSON.parse(cached);
+    }
+  } catch (e) {}
+
+  if (!settings) {
+    try {
+      const res = await fetch('/api/settings');
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.settings) {
+          settings = data.settings;
+        }
+      }
+    } catch (e) {}
+  }
+
+  if (settings) {
+    applyStudioSettings(settings);
+  }
+}
+
+function applyStudioSettings(settings) {
+  if (settings.email) {
+    document.querySelectorAll('.studio-contact-email').forEach(el => {
+      el.textContent = settings.email;
+      el.href = `mailto:${settings.email}`;
+    });
+  }
+  if (settings.phone) {
+    document.querySelectorAll('.studio-phone-link').forEach(el => {
+      el.href = `tel:${settings.phone}`;
+    });
+    document.querySelectorAll('.studio-phone-text').forEach(el => {
+      el.textContent = settings.phone;
+    });
+  }
+  if (settings.announcement) {
+    document.querySelectorAll('.studio-announcement').forEach(el => {
+      el.textContent = settings.announcement;
+    });
+  }
+  if (settings.address) {
+    document.querySelectorAll('.studio-address-text').forEach(el => {
+      el.textContent = settings.address;
+    });
+  }
+}
 
 // ==========================================
 // Asset URL Resolver

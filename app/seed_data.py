@@ -206,6 +206,7 @@ INITIAL_INQUIRIES = [
         "budget": "$400 - $600",
         "description": "Looking for a realism piece with an hourglass surrounded by smoke and broken Roman numerals.",
         "reference_image_url": "https://images.unsplash.com/photo-1568515045052-f9a854d70bfd?auto=format&fit=crop&w=600&q=80",
+        "artist_notes": "Spoke on phone 9/10. Client wants smoke wrapping around forearm into outer wrist. $100 deposit paid. Consultation scheduled for Oct 12th at 2PM.",
         "status": "New"
     },
     {
@@ -219,6 +220,7 @@ INITIAL_INQUIRIES = [
         "budget": "$200 - $300",
         "description": "Delicate fine line hummingbird feeding from a Texas bluebonnet stem.",
         "reference_image_url": "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?auto=format&fit=crop&w=600&q=80",
+        "artist_notes": "Emailed 3 custom stencil drafts on 9/11. Maya loves draft #2 with single-needle petal shading. Tentatively booking Oct 18th.",
         "status": "Contacted"
     }
 ]
@@ -288,13 +290,13 @@ def seed_database(force: bool = False):
                 cursor.execute("DELETE FROM inquiries")
             for inq in INITIAL_INQUIRIES:
                 cursor.execute("""
-                    INSERT INTO inquiries (client_name, client_email, client_phone, preferred_artist, tattoo_style, placement, estimated_size, budget, description, reference_image_url, status)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO inquiries (client_name, client_email, client_phone, preferred_artist, tattoo_style, placement, estimated_size, budget, description, reference_image_url, artist_notes, status)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, (
                     inq["client_name"], inq["client_email"], inq["client_phone"],
                     inq["preferred_artist"], inq["tattoo_style"], inq["placement"],
                     inq["estimated_size"], inq["budget"], inq["description"],
-                    inq["reference_image_url"], inq["status"]
+                    inq["reference_image_url"], inq.get("artist_notes", ""), inq["status"]
                 ))
             print(f"[OK] Seeded {len(INITIAL_INQUIRIES)} sample consultation inquiries")
 

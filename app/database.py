@@ -67,10 +67,17 @@ def init_db():
                 budget TEXT,
                 description TEXT NOT NULL,
                 reference_image_url TEXT,
+                artist_notes TEXT DEFAULT '',
                 status TEXT DEFAULT 'New',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
+
+        # Safe migration if table exists without artist_notes column
+        try:
+            cursor.execute("ALTER TABLE inquiries ADD COLUMN artist_notes TEXT DEFAULT ''")
+        except Exception:
+            pass
 
         # Studio Settings Table
         cursor.execute("""

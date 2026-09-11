@@ -74,12 +74,24 @@ class InquiryCreate(BaseModel):
 class InquiryStatusUpdate(BaseModel):
     status: str
 
+class InquiryNotesUpdate(BaseModel):
+    notes: str
+
 class SettingsUpdate(BaseModel):
     settings: dict
 
 # ==========================================
 # Public Endpoints
 # ==========================================
+
+@router.get("/settings")
+def get_public_settings():
+    """Retrieve public studio settings (phone, email, hours, address, announcement)."""
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT key, value FROM settings")
+        settings = {r["key"]: r["value"] for r in cursor.fetchall()}
+    return {"settings": settings}
 
 @router.get("/photos")
 def get_photos(
@@ -403,6 +415,20 @@ def admin_update_inquiry_status(
         if cursor.rowcount == 0:
             raise HTTPException(status_code=404, detail="Inquiry not found")
     return {"success": True, "status": payload.status}
+
+@router.patch("/admin/inquiries/{inquiry_id}/notes")
+def admin_update_inquiry_notes(
+    inquiry_id: int,
+    payload: InquiryNotesUpdate,
+    admin: dict = Depends(require_admin)
+):
+    """Update artist consultation notes for an inquiry."""
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("UPDATE inquiries SET artist_notes = ? WHERE id = ?", (payload.notes, inquiry_id))
+        if cursor.rowcount == 0:
+            raise HTTPException(status_code=404, detail="Inquiry not found")
+    return {"success": True, "notes": payload.notes}
 
 @router.delete("/admin/inquiries/{inquiry_id}")
 def admin_delete_inquiry(inquiry_id: int, admin: dict = Depends(require_admin)):
