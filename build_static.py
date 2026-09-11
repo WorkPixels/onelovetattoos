@@ -22,12 +22,20 @@ rendered = template.render(
 rendered = rendered.replace('href="/static/', 'href="static/')
 rendered = rendered.replace('src="/static/', 'src="static/')
 rendered = rendered.replace('href="/"', 'href="#"')
+rendered = rendered.replace('href="/admin"', 'href="admin.html"')
 
 with open('docs/index.html', 'w', encoding='utf-8') as f:
     f.write(rendered)
 
 # Write static JSON data file for client-side fallback on GitHub Pages
+docs_photos = []
+for p in INITIAL_PHOTOS:
+    item = dict(p)
+    if item['image_url'].startswith('/'):
+        item['image_url'] = item['image_url'].lstrip('/')
+    docs_photos.append(item)
+
 with open('docs/photos.json', 'w', encoding='utf-8') as f:
-    json.dump({'photos': INITIAL_PHOTOS}, f, indent=2)
+    json.dump({'photos': docs_photos}, f, indent=2)
 
 print('Static site built into docs/ successfully!')
