@@ -234,7 +234,9 @@ INITIAL_SETTINGS = {
     "hours": "Daily: 12:00 PM – 8:00 PM",
     "instagram": "https://instagram.com/onelovetattoos",
     "facebook": "https://facebook.com/onelovetattoos",
-    "tiktok": "https://tiktok.com/@onelovetattoos"
+    "tiktok": "https://tiktok.com/@onelovetattoos",
+    "logo_url": "",
+    "theme": "dark-gold"
 }
 
 def seed_database(force: bool = False):

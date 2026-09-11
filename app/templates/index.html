@@ -7,6 +7,18 @@
   <meta name="description" content="Premier custom tattoo studio and professional body piercing parlor in Georgetown, TX. Custom Black & Grey, American Traditional, Realism, Fine Line, and Texas Health Dept licensed sterile piercing.">
   <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
   <link rel="stylesheet" href="/static/css/style.css">
+  <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('onelove_theme');
+        if (!t) {
+          var serverTheme = "{{ settings.get('theme', 'dark-gold') }}";
+          if (serverTheme) t = serverTheme;
+        }
+        if (t) document.documentElement.setAttribute('data-theme', t);
+      } catch(e) {}
+    })();
+  </script>
 </head>
 <body>
 
@@ -30,7 +42,11 @@
     <div class="container nav-container">
       <a href="/" class="brand">
         <div class="brand-icon">
+          {% if settings.get('logo_url') %}
+          <img src="{{ settings.get('logo_url') }}" alt="Logo" class="brand-logo-img">
+          {% else %}
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          {% endif %}
         </div>
         <div class="brand-text">
           <h1>ONE LOVE</h1>
@@ -48,6 +64,37 @@
       </ul>
 
       <div class="nav-actions">
+        <!-- Theme Selector Dropdown -->
+        <div class="theme-selector-dropdown">
+          <button class="theme-toggle-btn" id="themeToggleBtn" title="Change Theme" aria-label="Select Theme">
+            <span class="theme-icon">🎨</span>
+            <span class="theme-current-label">Theme</span>
+          </button>
+          <div class="theme-menu" id="themeMenu">
+            <div class="theme-menu-title">Select Website Theme</div>
+            <button class="theme-opt-btn active" data-set-theme="dark-gold">
+              <span class="theme-opt-swatch" style="background: linear-gradient(135deg, #07080a 50%, #d4af37 50%);"></span>
+              <span>Dark Gold (Default)</span>
+            </button>
+            <button class="theme-opt-btn" data-set-theme="clean-light">
+              <span class="theme-opt-swatch" style="background: linear-gradient(135deg, #f8fafc 50%, #b48a17 50%); border: 1px solid #cbd5e1;"></span>
+              <span>Clean Studio Light ☀️</span>
+            </button>
+            <button class="theme-opt-btn" data-set-theme="midnight-crimson">
+              <span class="theme-opt-swatch" style="background: linear-gradient(135deg, #0e0d14 50%, #e11d48 50%);"></span>
+              <span>Midnight Crimson</span>
+            </button>
+            <button class="theme-opt-btn" data-set-theme="emerald-noir">
+              <span class="theme-opt-swatch" style="background: linear-gradient(135deg, #07130b 50%, #10b981 50%);"></span>
+              <span>Emerald Noir</span>
+            </button>
+            <button class="theme-opt-btn" data-set-theme="cyber-ink">
+              <span class="theme-opt-swatch" style="background: linear-gradient(135deg, #0a0d24 50%, #6366f1 50%);"></span>
+              <span>Cyber Ink</span>
+            </button>
+          </div>
+        </div>
+
         <a href="#booking" class="btn btn-primary btn-sm">Book Ink</a>
         <button class="mobile-toggle" aria-label="Toggle menu">☰</button>
       </div>

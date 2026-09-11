@@ -169,6 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
   } catch (e) {}
 
   initNavigation();
+  initTheme();
   initGallery();
   initBookingForm();
   initFaqAccordion();
@@ -176,7 +177,93 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// Studio Settings Sync (Email, Phone, Hours, Announcement)
+// Theme Management (5 Preset Themes)
+// ==========================================
+function initTheme() {
+  const themeToggleBtn = document.getElementById('themeToggleBtn');
+  const themeMenu = document.getElementById('themeMenu');
+  const themeOptBtns = document.querySelectorAll('.theme-opt-btn');
+
+  let currentTheme = localStorage.getItem('onelove_theme');
+  if (!currentTheme) {
+    try {
+      const s = localStorage.getItem('onelove_settings');
+      if (s) {
+        const parsed = JSON.parse(s);
+        if (parsed && parsed.theme) currentTheme = parsed.theme;
+      }
+    } catch(e) {}
+  }
+  if (!currentTheme) currentTheme = 'dark-gold';
+
+  setTheme(currentTheme, false);
+
+  if (themeToggleBtn && themeMenu) {
+    themeToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      themeMenu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!themeMenu.contains(e.target) && e.target !== themeToggleBtn) {
+        themeMenu.classList.remove('show');
+      }
+    });
+  }
+
+  themeOptBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const selected = btn.dataset.setTheme;
+      setTheme(selected, true);
+      if (themeMenu) themeMenu.classList.remove('show');
+    });
+  });
+}
+
+function setTheme(themeName, persist = true) {
+  document.documentElement.setAttribute('data-theme', themeName);
+  if (persist) {
+    try {
+      localStorage.setItem('onelove_theme', themeName);
+    } catch (e) {}
+  }
+
+  const themeOptBtns = document.querySelectorAll('.theme-opt-btn');
+  themeOptBtns.forEach(btn => {
+    if (btn.dataset.setTheme === themeName) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
+  const currentLabel = document.querySelector('.theme-current-label');
+  const themeIcon = document.querySelector('.theme-icon');
+  if (currentLabel) {
+    if (themeName === 'clean-light') {
+      currentLabel.textContent = 'Light';
+      if (themeIcon) themeIcon.textContent = '☀️';
+    } else if (themeName === 'dark-gold') {
+      currentLabel.textContent = 'Dark Gold';
+      if (themeIcon) themeIcon.textContent = '👑';
+    } else if (themeName === 'midnight-crimson') {
+      currentLabel.textContent = 'Crimson';
+      if (themeIcon) themeIcon.textContent = '🌹';
+    } else if (themeName === 'emerald-noir') {
+      currentLabel.textContent = 'Emerald';
+      if (themeIcon) themeIcon.textContent = '🌿';
+    } else if (themeName === 'cyber-ink') {
+      currentLabel.textContent = 'Cyber';
+      if (themeIcon) themeIcon.textContent = '⚡';
+    } else {
+      currentLabel.textContent = 'Theme';
+      if (themeIcon) themeIcon.textContent = '🎨';
+    }
+  }
+}
+
+// ==========================================
+// Studio Settings Sync (Email, Phone, Hours, Announcement, Logo, Theme)
 // ==========================================
 async function initStudioSettings() {
   let settings = null;
@@ -228,6 +315,20 @@ function applyStudioSettings(settings) {
   if (settings.address) {
     document.querySelectorAll('.studio-address-text').forEach(el => {
       el.textContent = settings.address;
+    });
+  }
+  if (settings.theme && !localStorage.getItem('onelove_theme')) {
+    setTheme(settings.theme, false);
+  }
+  if (settings.logo_url !== undefined) {
+    const brandIcons = document.querySelectorAll('.brand-icon');
+    brandIcons.forEach(icon => {
+      if (settings.logo_url && settings.logo_url.trim()) {
+        const resolved = resolveAssetUrl(settings.logo_url);
+        icon.innerHTML = `<img src="${resolved}" alt="One Love Tattoos" class="brand-logo-img">`;
+      } else {
+        icon.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+      }
     });
   }
 }

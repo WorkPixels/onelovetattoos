@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>One Love Tattoos | Studio Admin Dashboard</title>
   <link rel="icon" type="image/svg+xml" href="../static/favicon.svg">
-  <link rel="stylesheet" href="../static/css/admin.css">
+  <link rel="stylesheet" href="../static/css/admin.css?v=20260911_v5">
   <style>
     /* Full-screen Login overlay if not authenticated */
     .admin-login-overlay {
@@ -411,11 +411,112 @@
 
         <!-- TAB: SETTINGS -->
         <section class="admin-tab-content" id="tab-settings">
-          <div class="content-card" style="max-width: 600px;">
+          <div class="content-card" style="max-width: 780px;">
             <div class="card-header-bar">
-              <h3 class="card-title">Public Studio Information</h3>
+              <h3 class="card-title">Public Studio Information & Branding</h3>
             </div>
             <form id="studioSettingsForm">
+              <!-- Company Logo Configuration -->
+              <div class="form-group" style="margin-bottom: 22px;">
+                <label class="form-label" style="font-weight: 600; color: var(--admin-gold);">Studio Brand Logo</label>
+                <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 10px;">
+                  Custom logo displayed across the website navigation bar and dashboard. Upload an image file or enter a direct image URL.
+                </p>
+                <div class="settings-logo-wrap">
+                  <div class="settings-logo-preview" id="adminLogoPreview" title="Studio Logo Preview">
+                    <svg id="adminLogoFallback" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                  </div>
+                  <div class="settings-logo-actions">
+                    <input type="text" id="settingLogoUrl" name="logo_url" class="form-input" placeholder="Logo image URL (or upload below)" style="font-size: 0.85rem;" />
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                      <button type="button" class="btn-admin btn-admin-ghost" id="btnUploadLogo" style="font-size: 0.8rem; padding: 6px 12px;">
+                        📁 Upload Logo File
+                      </button>
+                      <button type="button" class="btn-admin btn-admin-ghost" id="btnResetLogo" style="font-size: 0.8rem; padding: 6px 12px; color: var(--text-muted);">
+                        Reset to Default Heart
+                      </button>
+                      <input type="file" id="logoFileInput" accept="image/*" style="display: none;" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Website Theme Selector -->
+              <div class="form-group" style="margin-bottom: 24px;">
+                <label class="form-label" style="font-weight: 600; color: var(--admin-gold);">Website Default Theme (5 Presets)</label>
+                <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 10px;">
+                  Choose the primary color palette and visual styling for your public studio website. Includes our clean high-contrast light gallery theme.
+                </p>
+                <input type="hidden" name="theme" id="studioThemeInput" value="dark-gold" />
+                <div class="settings-theme-grid" id="settingsThemeGrid">
+                  <!-- Theme 1: Dark Gold -->
+                  <div class="theme-card-option active" data-theme-val="dark-gold">
+                    <div class="theme-card-top">
+                      <div class="theme-card-swatches">
+                        <div class="theme-swatch" style="background: #07080a;"></div>
+                        <div class="theme-swatch" style="background: #d4af37;"></div>
+                      </div>
+                      <span class="theme-card-badge">✓ Active</span>
+                    </div>
+                    <div class="theme-card-title">Dark Gold (Default)</div>
+                    <div class="theme-card-desc">Signature luxury obsidian dark mode with radiant golden accents.</div>
+                  </div>
+
+                  <!-- Theme 2: Clean Studio Light -->
+                  <div class="theme-card-option" data-theme-val="clean-light">
+                    <div class="theme-card-top">
+                      <div class="theme-card-swatches">
+                        <div class="theme-swatch" style="background: #f8fafc; border-color: #cbd5e1;"></div>
+                        <div class="theme-swatch" style="background: #b48a17;"></div>
+                        <div class="theme-swatch" style="background: #0f172a;"></div>
+                      </div>
+                      <span class="theme-card-badge">✓ Active</span>
+                    </div>
+                    <div class="theme-card-title">Clean Studio Light ☀️</div>
+                    <div class="theme-card-desc">Crisp white gallery aesthetic with deep slate text and warm gold highlights.</div>
+                  </div>
+
+                  <!-- Theme 3: Midnight Crimson -->
+                  <div class="theme-card-option" data-theme-val="midnight-crimson">
+                    <div class="theme-card-top">
+                      <div class="theme-card-swatches">
+                        <div class="theme-swatch" style="background: #0e0d14;"></div>
+                        <div class="theme-swatch" style="background: #e11d48;"></div>
+                      </div>
+                      <span class="theme-card-badge">✓ Active</span>
+                    </div>
+                    <div class="theme-card-title">Midnight Crimson</div>
+                    <div class="theme-card-desc">Bold American traditional noir with vivid ruby crimson fire accents.</div>
+                  </div>
+
+                  <!-- Theme 4: Emerald Noir -->
+                  <div class="theme-card-option" data-theme-val="emerald-noir">
+                    <div class="theme-card-top">
+                      <div class="theme-card-swatches">
+                        <div class="theme-swatch" style="background: #07130b;"></div>
+                        <div class="theme-swatch" style="background: #10b981;"></div>
+                      </div>
+                      <span class="theme-card-badge">✓ Active</span>
+                    </div>
+                    <div class="theme-card-title">Emerald Noir</div>
+                    <div class="theme-card-desc">Deep botanical forest noir with radiant jade emerald highlights.</div>
+                  </div>
+
+                  <!-- Theme 5: Cyber Ink -->
+                  <div class="theme-card-option" data-theme-val="cyber-ink">
+                    <div class="theme-card-top">
+                      <div class="theme-card-swatches">
+                        <div class="theme-swatch" style="background: #0a0d24;"></div>
+                        <div class="theme-swatch" style="background: #6366f1;"></div>
+                      </div>
+                      <span class="theme-card-badge">✓ Active</span>
+                    </div>
+                    <div class="theme-card-title">Cyber Ink</div>
+                    <div class="theme-card-desc">Electric surrealism indigo with glowing electric violet neon aura.</div>
+                  </div>
+                </div>
+              </div>
+
               <div class="form-group">
                 <label class="form-label">Studio Name</label>
                 <input type="text" name="studio_name" class="form-input" value="One Love Tattoos" />
@@ -441,7 +542,7 @@
                 <input type="text" name="hours" class="form-input" value="Monday - Sunday: 12:00 PM - 8:00 PM" />
               </div>
               <button type="submit" class="btn-admin btn-admin-gold">
-                Save Studio Information
+                Save Studio Information & Branding
               </button>
             </form>
           </div>
@@ -565,6 +666,6 @@
 
   <div class="admin-toast-container"></div>
 
-  <script src="../static/js/admin-static.js?v=20260911_v3"></script>
+  <script src="../static/js/admin-static.js?v=20260911_v5"></script>
 </body>
 </html>

@@ -4,13 +4,16 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap');
 
-:root {
+/* ==========================================================================
+   THEME 1: SIGNATURE DARK GOLD (DEFAULT)
+   ========================================================================== */
+:root, [data-theme="dark-gold"] {
   --bg-darkest: #07080a;
   --bg-primary: #0d0f14;
   --bg-secondary: #131720;
   --bg-card: #181d28;
   --bg-card-hover: #1f2534;
-  --bg-glass: rgba(19, 23, 32, 0.85);
+  --bg-glass: rgba(13, 15, 20, 0.92);
 
   --accent-gold: #d4af37;
   --accent-gold-light: #f5cf56;
@@ -20,6 +23,7 @@
   --accent-crimson: #e63946;
   --accent-teal: #06d6a0;
 
+  --heading-color: #ffffff;
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
@@ -46,6 +50,253 @@
   --transition-normal: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* ==========================================================================
+   THEME 2: CLEAN STUDIO LIGHT (CONTRAST LIGHT GALLERY)
+   ========================================================================== */
+[data-theme="clean-light"] {
+  --bg-darkest: #f1f5f9;
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --bg-glass: rgba(255, 255, 255, 0.94);
+
+  --accent-gold: #b48a17;
+  --accent-gold-light: #d4af37;
+  --accent-gold-dark: #8a680b;
+  --accent-gold-glow: rgba(180, 138, 23, 0.18);
+  
+  --accent-crimson: #dc2626;
+  --accent-teal: #0d9488;
+
+  --heading-color: #0f172a;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+
+  --border-subtle: rgba(15, 23, 42, 0.1);
+  --border-gold: rgba(180, 138, 23, 0.4);
+  --border-gold-active: rgba(180, 138, 23, 0.9);
+
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.09);
+  --shadow-lg: 0 16px 36px rgba(15, 23, 42, 0.12);
+  --shadow-gold: 0 0 20px rgba(180, 138, 23, 0.18);
+}
+
+/* ==========================================================================
+   THEME 3: MIDNIGHT CRIMSON (AMERICANA TRADITIONAL)
+   ========================================================================== */
+[data-theme="midnight-crimson"] {
+  --bg-darkest: #09090d;
+  --bg-primary: #0e0d14;
+  --bg-secondary: #161420;
+  --bg-card: #1c1928;
+  --bg-card-hover: #262136;
+  --bg-glass: rgba(14, 13, 20, 0.92);
+
+  --accent-gold: #e11d48;
+  --accent-gold-light: #fb7185;
+  --accent-gold-dark: #9f1239;
+  --accent-gold-glow: rgba(225, 29, 72, 0.3);
+  
+  --accent-crimson: #f43f5e;
+  --accent-teal: #e11d48;
+
+  --heading-color: #ffffff;
+  --text-primary: #fff1f2;
+  --text-secondary: #fda4af;
+  --text-muted: #e11d48;
+
+  --border-subtle: rgba(225, 29, 72, 0.18);
+  --border-gold: rgba(225, 29, 72, 0.4);
+  --border-gold-active: rgba(225, 29, 72, 0.9);
+  --shadow-gold: 0 0 25px rgba(225, 29, 72, 0.25);
+}
+
+/* ==========================================================================
+   THEME 4: EMERALD NOIR (BOTANICAL & FINE LINE)
+   ========================================================================== */
+[data-theme="emerald-noir"] {
+  --bg-darkest: #050a07;
+  --bg-primary: #07130b;
+  --bg-secondary: #0c1f13;
+  --bg-card: #11281a;
+  --bg-card-hover: #183824;
+  --bg-glass: rgba(7, 19, 11, 0.92);
+
+  --accent-gold: #10b981;
+  --accent-gold-light: #34d399;
+  --accent-gold-dark: #059669;
+  --accent-gold-glow: rgba(16, 185, 129, 0.28);
+  
+  --accent-crimson: #f59e0b;
+  --accent-teal: #10b981;
+
+  --heading-color: #ffffff;
+  --text-primary: #ecfdf5;
+  --text-secondary: #a7f3d0;
+  --text-muted: #6ee7b7;
+
+  --border-subtle: rgba(16, 185, 129, 0.16);
+  --border-gold: rgba(16, 185, 129, 0.38);
+  --border-gold-active: rgba(16, 185, 129, 0.9);
+  --shadow-gold: 0 0 25px rgba(16, 185, 129, 0.25);
+}
+
+/* ==========================================================================
+   THEME 5: CYBER INK (ELECTRIC SURREALISM)
+   ========================================================================== */
+[data-theme="cyber-ink"] {
+  --bg-darkest: #060714;
+  --bg-primary: #0a0d24;
+  --bg-secondary: #101538;
+  --bg-card: #161c4a;
+  --bg-card-hover: #1e2660;
+  --bg-glass: rgba(10, 13, 36, 0.92);
+
+  --accent-gold: #6366f1;
+  --accent-gold-light: #818cf8;
+  --accent-gold-dark: #4338ca;
+  --accent-gold-glow: rgba(99, 102, 241, 0.35);
+  
+  --accent-crimson: #ec4899;
+  --accent-teal: #06b6d4;
+
+  --heading-color: #ffffff;
+  --text-primary: #e0e7ff;
+  --text-secondary: #a5b4fc;
+  --text-muted: #818cf8;
+
+  --border-subtle: rgba(99, 102, 241, 0.18);
+  --border-gold: rgba(99, 102, 241, 0.4);
+  --border-gold-active: rgba(99, 102, 241, 0.9);
+  --shadow-gold: 0 0 25px rgba(99, 102, 241, 0.28);
+}
+
+/* Clean Light Theme Adaptations */
+html[data-theme="clean-light"] {
+  color-scheme: light;
+}
+
+[data-theme="clean-light"] h1,
+[data-theme="clean-light"] h2,
+[data-theme="clean-light"] h3,
+[data-theme="clean-light"] h4,
+[data-theme="clean-light"] .font-display,
+[data-theme="clean-light"] .brand-text h1,
+[data-theme="clean-light"] .metric-val,
+[data-theme="clean-light"] .card-title,
+[data-theme="clean-light"] .faq-question {
+  color: #0f172a;
+}
+
+[data-theme="clean-light"] .gold-text {
+  background: linear-gradient(135deg, #8a680b 0%, #b48a17 50%, #684e06 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="clean-light"] .ticker-bar {
+  background: linear-gradient(90deg, #f8fafc, #fef9c3, #f8fafc);
+  border-bottom: 1px solid rgba(180, 138, 23, 0.25);
+  color: #475569;
+}
+
+[data-theme="clean-light"] .navbar {
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="clean-light"] .nav-link {
+  color: #475569;
+}
+
+[data-theme="clean-light"] .nav-link:hover,
+[data-theme="clean-light"] .nav-link.active {
+  color: #0f172a;
+}
+
+[data-theme="clean-light"] .mobile-toggle {
+  color: #0f172a;
+}
+
+[data-theme="clean-light"] .hero h1 {
+  text-shadow: none;
+  color: #0f172a;
+}
+
+[data-theme="clean-light"] .hero-lead {
+  color: #334155;
+}
+
+[data-theme="clean-light"] .hero-bg-img {
+  filter: brightness(0.62) contrast(0.95);
+}
+
+[data-theme="clean-light"] .hero-overlay {
+  background: linear-gradient(to bottom, 
+              rgba(248, 250, 252, 0.85) 0%, 
+              rgba(248, 250, 252, 0.95) 60%, 
+              var(--bg-darkest) 100%);
+}
+
+[data-theme="clean-light"] .btn-outline {
+  background: rgba(15, 23, 42, 0.03);
+  color: #0f172a;
+  border-color: rgba(180, 138, 23, 0.4);
+}
+
+[data-theme="clean-light"] .btn-outline:hover {
+  background: rgba(180, 138, 23, 0.12);
+  color: #0f172a;
+}
+
+[data-theme="clean-light"] .btn-ghost {
+  color: #475569;
+}
+
+[data-theme="clean-light"] .btn-ghost:hover {
+  color: #0f172a;
+  background: rgba(15, 23, 42, 0.06);
+}
+
+[data-theme="clean-light"] .tattoo-card {
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+  border-color: rgba(15, 23, 42, 0.1);
+}
+
+[data-theme="clean-light"] .form-input,
+[data-theme="clean-light"] .form-select,
+[data-theme="clean-light"] .form-textarea,
+[data-theme="clean-light"] .artist-filter-select {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: rgba(15, 23, 42, 0.15);
+}
+
+[data-theme="clean-light"] .form-label {
+  color: #0f172a;
+}
+
+[data-theme="clean-light"] .search-input-wrap input {
+  color: #0f172a;
+}
+
+[data-theme="clean-light"] .brand-icon {
+  background: radial-gradient(circle, #fef3c7 0%, #ffffff 100%);
+  border-color: var(--accent-gold);
+}
+
+[data-theme="clean-light"] .footer {
+  background: #0f172a;
+  color: #94a3b8;
+}
+
+[data-theme="clean-light"] .footer h4 {
+  color: #ffffff;
+}
+
 /* Reset & Base */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -55,7 +306,6 @@
 
 html {
   scroll-behavior: smooth;
-  color-scheme: dark;
 }
 
 body {
@@ -221,6 +471,16 @@ img {
   color: var(--accent-gold);
   box-shadow: var(--shadow-gold);
   transition: transform var(--transition-normal);
+  overflow: hidden;
+  position: relative;
+}
+
+.brand-icon img.brand-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
 }
 
 .brand:hover .brand-icon {
@@ -281,7 +541,103 @@ img {
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
+}
+
+/* Theme Selector Dropdown */
+.theme-selector-dropdown {
+  position: relative;
+}
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  color: var(--text-primary);
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--accent-gold);
+  box-shadow: var(--shadow-gold);
+  transform: translateY(-1px);
+}
+
+.theme-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-md);
+  padding: 8px;
+  min-width: 220px;
+  box-shadow: var(--shadow-lg);
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 1000;
+}
+
+.theme-menu.show {
+  display: flex;
+  animation: fadeIn 0.18s ease-out forwards;
+}
+
+.theme-menu-title {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  padding: 6px 10px 4px 10px;
+  font-weight: 700;
+}
+
+.theme-opt-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: 100%;
+}
+
+.theme-opt-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-subtle);
+}
+
+.theme-opt-btn.active {
+  background: var(--bg-secondary);
+  border-color: var(--accent-gold);
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+.theme-opt-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .mobile-toggle {

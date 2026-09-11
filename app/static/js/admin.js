@@ -690,6 +690,100 @@ window.deleteArtist = async function(id, name) {
 function initSettingsManagement() {
   const settingsForm = document.getElementById('studioSettingsForm');
   const passwordForm = document.getElementById('changePasswordForm');
+  const logoPreview = document.getElementById('adminLogoPreview');
+  const logoInput = document.getElementById('settingLogoUrl');
+  const btnUploadLogo = document.getElementById('btnUploadLogo');
+  const btnResetLogo = document.getElementById('btnResetLogo');
+  const logoFileInput = document.getElementById('logoFileInput');
+  const themeInput = document.getElementById('studioThemeInput');
+  const themeCards = document.querySelectorAll('.theme-card-option');
+
+  function updateLogoUI(url) {
+    if (logoPreview) {
+      if (url && url.trim()) {
+        logoPreview.innerHTML = `<img src="${url}" alt="Studio Logo" style="width:100%;height:100%;object-fit:cover;">`;
+      } else {
+        logoPreview.innerHTML = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+      }
+    }
+    const adminBrandIcon = document.querySelector('.admin-brand-icon');
+    if (adminBrandIcon) {
+      if (url && url.trim()) {
+        adminBrandIcon.innerHTML = `<img src="${url}" alt="Logo" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">`;
+      } else {
+        adminBrandIcon.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+      }
+    }
+  }
+
+  function selectTheme(themeName) {
+    if (themeInput) themeInput.value = themeName;
+    themeCards.forEach(card => {
+      if (card.dataset.themeVal === themeName) {
+        card.classList.add('active');
+      } else {
+        card.classList.remove('active');
+      }
+    });
+  }
+
+  themeCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const chosenTheme = card.dataset.themeVal;
+      selectTheme(chosenTheme);
+    });
+  });
+
+  if (btnUploadLogo && logoFileInput) {
+    btnUploadLogo.addEventListener('click', () => logoFileInput.click());
+    logoFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 3 * 1024 * 1024) {
+        adminToast('Logo image should be under 3MB', 'error');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const dataUrl = event.target.result;
+        if (logoInput) logoInput.value = dataUrl;
+        updateLogoUI(dataUrl);
+        adminToast('Logo image loaded! Click Save to apply.', 'info');
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  if (logoInput) {
+    logoInput.addEventListener('input', () => {
+      updateLogoUI(logoInput.value);
+    });
+  }
+
+  if (btnResetLogo) {
+    btnResetLogo.addEventListener('click', () => {
+      if (logoInput) logoInput.value = '';
+      if (logoFileInput) logoFileInput.value = '';
+      updateLogoUI('');
+      adminToast('Logo reset to default icon', 'info');
+    });
+  }
+
+  // If initial logo value is present from template rendering or cache
+  if (logoInput && logoInput.value) {
+    updateLogoUI(logoInput.value);
+  } else {
+    try {
+      const cached = localStorage.getItem('onelove_settings');
+      if (cached) {
+        const s = JSON.parse(cached);
+        if (s.logo_url) {
+          if (logoInput) logoInput.value = s.logo_url;
+          updateLogoUI(s.logo_url);
+        }
+      }
+    } catch(e) {}
+  }
 
   if (settingsForm) {
     settingsForm.addEventListener('submit', async (e) => {
@@ -707,7 +801,11 @@ function initSettingsManagement() {
           body: JSON.stringify({ settings })
         });
         if (res.ok) {
-          adminToast('Studio settings saved successfully', 'success');
+          localStorage.setItem('onelove_settings', JSON.stringify(settings));
+          if (settings.theme) {
+            localStorage.setItem('onelove_theme', settings.theme);
+          }
+          adminToast('Studio settings & branding saved successfully', 'success');
         } else {
           adminToast('Failed to save settings', 'error');
         }
